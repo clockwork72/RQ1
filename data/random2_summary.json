@@ -1,0 +1,98 @@
+{
+  "source": "/home/soufiane.essahli/lustre/vr_outsec-vh2sz1t4fks/users/soufiane.essahli/scraper/repo/outputs/unified_mo_full2/results.jsonl",
+  "output": "/home/soufiane.essahli/lustre/vr_outsec-vh2sz1t4fks/users/soufiane.essahli/scraper/repo/outputs/unified_mo_full2/cross_policy_pairs_random2_per_site.jsonl",
+  "min_words_floor": 500,
+  "k_per_site": 2,
+  "seed": 42,
+  "qualifying_fp_sites": 3067,
+  "sites_emitted": 2751,
+  "sites_with_zero_valid_tp": 316,
+  "sites_with_one_valid_tp": 130,
+  "pairs_emitted": 5372,
+  "distinct_vendor_etld1": 542,
+  "distinct_vendor_entities": 259,
+  "top_vendor_etld1": [
+    [
+      "googletagmanager.com",
+      588
+    ],
+    [
+      "google.com",
+      443
+    ],
+    [
+      "google-analytics.com",
+      272
+    ],
+    [
+      "doubleclick.net",
+      269
+    ],
+    [
+      "googleapis.com",
+      217
+    ],
+    [
+      "gstatic.com",
+      172
+    ],
+    [
+      "onetrust.com",
+      151
+    ],
+    [
+      "cookielaw.org",
+      140
+    ],
+    [
+      "cloudflareinsights.com",
+      114
+    ],
+    [
+      "googlesyndication.com",
+      109
+    ]
+  ],
+  "top_vendor_entities": [
+    [
+      "Google LLC",
+      1973
+    ],
+    [
+      "OneTrust LLC",
+      296
+    ],
+    [
+      "Microsoft Corporation",
+      264
+    ],
+    [
+      "Google",
+      238
+    ],
+    [
+      "Cloudflare, Inc.",
+      208
+    ],
+    [
+      "Adobe Inc.",
+      198
+    ],
+    [
+      "Prospect One",
+      96
+    ],
+    [
+      "HubSpot, Inc.",
+      89
+    ],
+    [
+      "Sentry",
+      56
+    ],
+    [
+      "Twitter, Inc.",
+      51
+    ]
+  ]
+}

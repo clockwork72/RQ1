@@ -17,9 +17,9 @@ cross-policy analyses, and the extraction manifest fed to the LLM reader.
   paper's claim next to it, so you can scan for agreement.
 - **`notebook/reproduce_pairs.ipynb`** — rebuilds the random-2-per-FP pair
   set that feeds RQ2–RQ4 from scratch (seed = 42), verifies it matches the
-  canonical pair list byte-for-byte, and then reports aggregate metrics
+  reference pair list byte-for-byte, and then reports summary numbers
   (top-10 third-party concentration, policy-length distributions, and the
-  deduplicated extraction manifest handed to the LLM reader).
+  extraction manifest handed to the LLM reader).
 
 ## How to run
 
@@ -68,10 +68,10 @@ Alongside the archive, three small JSON / CSV files ship uncompressed so the
 `reproduce_pairs.ipynb` notebook can cross-check its reproduction without
 re-running the HPC pipeline:
 
-- `data/random2_summary.json` — aggregate counters from the canonical pair
+- `data/random2_summary.json` — summary counters from the reference pair
   builder (seed = 42).
 - `data/random2_pair_ids.json` — the full 5,372-tuple list of
-  `(first-party eTLD+1, third-party eTLD+1)` pairs that the canonical
+  `(first-party eTLD+1, third-party eTLD+1)` pairs that the reference
   builder emitted.
 - `data/manifest.csv` and `data/manifest.summary.json` — the extraction
   manifest listing one row per unique policy document to be run through the
@@ -105,11 +105,11 @@ re-running the HPC pipeline:
 
 | Cell | Reproduces |
 |---|---|
-| 1–4 | Decompress + imports + dataset + canonical reference load |
+| 1–4 | Decompress + imports + dataset + reference file load |
 | 5 | Which first parties are eligible (3,067 with inline text) |
 | 6 | Distribution of qualifying third parties per first party |
-| 7 | Deterministic `random.sample` (seed = 42) — emits 5,372 pairs across 2,751 FPs |
-| 8 | Verify the reproduced pair set against `data/random2_pair_ids.json` (bit-identical) |
+| 7 | Repeatable `random.sample` (seed = 42) — emits 5,372 pairs across 2,751 FPs |
+| 8 | Verify the reproduced pair set against `data/random2_pair_ids.json` (exactly the same) |
 | 9–11 | Top-10 third-party eTLD+1 / entity concentration + top-10 share |
 | 12 | Policy-length distributions on the pair dataset |
 | 13 | Figure — top-10 third-party concentration |
@@ -118,6 +118,6 @@ re-running the HPC pipeline:
 | 16 | Extraction workload size — 18.6 M words across 3,155 documents |
 | 17 | Cross-check reproduced FP / TP sets against `manifest.csv` |
 
-Each cell prints its output next to the canonical value it should match,
+Each cell prints its output next to the reference value it should match,
 in the form `Availability 41.0%  [paper 41.0%]` or
-`Reproduced pairs emitted: 5,372  [canonical 5,372]`.
+`Reproduced pairs emitted: 5,372  [reference 5,372]`.

@@ -1,0 +1,11 @@
+# Raw, uncompressed dataset — only the tarball is committed.
+data_raw/
+data/raw/
+
+# Jupyter artifacts
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+
+# Matplotlib figure output if the notebook is extended to save PDFs
+notebook/output/

@@ -1,6 +1,6 @@
 # RQ1 reproducibility package
 
-This repository lets you re-run the RQ1 analysis from our CCS 2026 submission
+This repository lets you re-run the RQ1 analysis 
 from scratch, on your own machine. It is self-contained: the crawl output we
 used is bundled as a compressed archive, and two Jupyter notebooks recompute
 everything the paper reports — both tables, the numbers quoted in the prose,

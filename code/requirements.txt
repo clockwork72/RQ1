@@ -1,0 +1,21 @@
+# Pinned to versions that have been tested on 2× A100 + Python 3.11.
+# Looser pins are fine for the notebooks; the LLM-serving stack needs vllm.
+numpy>=1.26
+pandas>=2.0
+matplotlib>=3.7
+jupyter>=1.0
+
+# Pipeline (extractor + verifier) — only need an OpenAI-style client
+openai>=1.30
+python-dotenv>=1.0
+requests>=2.31
+
+# RoBERTa GDPR classifier
+torch>=2.1
+transformers>=4.40
+safetensors>=0.4
+scikit-learn>=1.3
+
+# Privacy-policy parsing helpers
+beautifulsoup4>=4.12
+lxml>=4.9

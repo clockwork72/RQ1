@@ -1,0 +1,31 @@
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+.pytest_cache/
+
+# Notebook outputs are committed (so reviewers can read the numbers without
+# running anything), but checkpoints are not.
+
+# Macros
+.DS_Store
+.idea/
+.vscode/
+
+# Trained weights — distributed via GitHub releases, not git
+data/models/
+weights/*.tar.gz
+
+# Extracted artifacts
+data/extractions/
+data/extractions.tar.gz
+*.tmp
+
+# Outputs of run_extraction.py / run_verification.py
+out/
+findings_*.csv

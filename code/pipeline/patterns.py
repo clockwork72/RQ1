@@ -1,4 +1,4 @@
-"""Inconsistency detection patterns for PoliReasoner."""
+"""Cross-policy inconsistency detection patterns (Pi1-Pi4)."""
 
 from __future__ import annotations
 
@@ -19,10 +19,10 @@ from .normalizer import (
     normalize_purpose,
 )
 
-try:
-    from bert_extraction.e2e_audit.scripts import debug_dump as _dd
-except Exception:  # pragma: no cover - debug is optional
-    _dd = None
+# Per-stage debug dumping is wired to an internal auditing module that does
+# not ship in this repo; the headless pipeline doesn't need it. _dd stays
+# None so the existing `if _dd is not None: ...` call sites remain no-ops.
+_dd = None
 
 
 def _trace(pattern: str, event: dict) -> None:

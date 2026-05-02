@@ -12,10 +12,12 @@ matching the schema shipped at `data/extractions.tar.gz`.
 Usage
 -----
     # one policy
-    python scripts/run_extraction.py --policy data/sample_policy.txt --out out/
+    python code/scripts/run_extraction.py \\
+        --policy data/sample_policies/example_site.txt --out out/
 
     # batch of policies (one .txt per file in a directory)
-    python scripts/run_extraction.py --policy-dir data/raw_policies/ --out out/
+    python code/scripts/run_extraction.py \\
+        --policy-dir data/sample_policies/ --out out/
 """
 from __future__ import annotations
 

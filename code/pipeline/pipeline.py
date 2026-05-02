@@ -42,11 +42,11 @@ try:
 except Exception:  # pragma: no cover - optional dependency
     visualize_graph = None
 
-# Optional per-stage debug dumping — no-op unless PIPELINE_DEBUG=1 is set.
-try:
-    from bert_extraction.e2e_audit.scripts import debug_dump as _dd
-except Exception:  # pragma: no cover - debug is optional
-    _dd = None
+# Per-stage debug dumping (PIPELINE_DEBUG=1) was hooked up to an internal
+# auditing module that does not ship in this repo; the headless pipeline
+# does not need it. Kept as a sentinel so the existing call sites
+# (`if _dd is not None: ...`) remain no-ops without further edits.
+_dd = None
 
 # ─────────────────────────────────────────────────────────────────────────
 # Reproducibility metadata — captured in every pair's results JSON so a
@@ -1990,7 +1990,7 @@ def run_demo(output_dir: str | Path | None = None) -> dict:
     """Run the built-in ExampleShop/Google Analytics demo pair."""
 
     print("\n" + "=" * 70)
-    print("  PoliReasoner - Demo Mode")
+    print("  Cross-policy pipeline - Demo Mode")
     print("  Using built-in ExampleShop.com + Google Analytics policies")
     print("=" * 70)
     return run_pair(

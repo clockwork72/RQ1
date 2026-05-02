@@ -1005,10 +1005,11 @@ def _active_model_name() -> str:
     if EXTRACTION_BACKEND == "openai_compat":
         return f"openai_compat:{LLM_MODEL}"
     if EXTRACTION_BACKEND == "squad":
-        # Identity-hash over the specialist + NER checkpoint mtimes so the
-        # clause cache invalidates when any head is retrained.
-        from bert_extraction.bert_squad.squad_llm_adapter import squad_identity
-        return f"squad:{squad_identity()}"
+        raise RuntimeError(
+            "EXTRACTION_BACKEND='squad' uses an internal DeBERTa specialist "
+            "ensemble that is not shipped with this artifact. Use 'anthropic', "
+            "'openai', 'llamacpp', or 'openai_compat'."
+        )
     raise RuntimeError(f"Unsupported EXTRACTION_BACKEND '{EXTRACTION_BACKEND}'")
 
 
@@ -2397,16 +2398,10 @@ def extract_pps_from_policy(
             for attempt in range(MAX_RETRIES):
                 try:
                     if EXTRACTION_BACKEND == "squad":
-                        # BERT Squad path — no network call, no reflection.
-                        # Adapter runs all 6 DeBERTa heads on the clause and
-                        # emits raw items in the same dict shape Gemma
-                        # reflection produces.
-                        from bert_extraction.bert_squad.squad_llm_adapter import (
-                            extract_raw_items as _squad_extract_raw_items,
-                        )
-                        raw_items = _squad_extract_raw_items(
-                            clause.text, section=section,
-                            policy_source=policy_source,
+                        raise RuntimeError(
+                            "EXTRACTION_BACKEND='squad' uses an internal "
+                            "DeBERTa specialist ensemble that is not shipped "
+                            "with this artifact."
                         )
                     elif EXTRACTION_REFLECTION_ENABLED:
                         raw_items = _extract_with_reflection(client, prompt)

@@ -1,4 +1,4 @@
-"""Data schema for PoliReasoner."""
+"""Data schema for the cross-policy pipeline."""
 
 from dataclasses import dataclass, field
 from enum import Enum

@@ -197,10 +197,6 @@ PATTERN_NAMES = {
     "Π₂": "Exclusivity Violation",
     "Π₃": "Condition Asymmetry",
     "Π₄": "Temporal Contradiction",
-    "Π₅": "Temporal Contradiction",
-    "Π₇": "Vagueness Asymmetry",
-    "Π₈": "Commitment Transitivity Violation",
-    "Π₉": "Rights Propagation Failure",
 }
 
 

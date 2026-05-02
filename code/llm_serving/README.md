@@ -40,7 +40,33 @@ bash llm_serving/serve_vllm.sh
 source llm_serving/env_local.sh
 
 # Run anything that needs an LLM
-python scripts/run_extraction.py --policy data/sample_policy.txt --out out/
-python scripts/run_verification.py --extractions out/ --pairs data/sample_pairs.csv --out findings.csv
+python code/scripts/run_extraction.py \
+    --policy data/sample_policies/example_site.txt --out out/
+python code/scripts/run_verification.py \
+    --pairs data/sample_pairs.csv --out out/
 ```
+
+## Models referenced in the paper
+
+The paper benchmarks several LLMs as extractors and verifiers. Each name
+below is the tag used in the bundled result JSONs and in the leaderboard /
+perturbation tables. To reproduce a row, serve the corresponding model
+through your `/v1` endpoint and re-run `code/scripts/run_evaluation.py` with
+that model.
+
+| Tag in the paper | Where to obtain weights | How we served it |
+|---|---|---|
+| `gemma3:27b`         | `ollama pull gemma3:27b` (Google, public)               | Local 2× A100 |
+| `gemma4:31b`         | `ollama pull gemma4:31b` (Google, public)               | Rented Vast.ai 4× A100 |
+| `qwen3-next:80b`     | `ollama pull qwen3-next:80b` (Alibaba, public)          | Rented Vast.ai 4× A100 |
+| `qwen3-vl:235b`      | `ollama pull qwen3-vl:235b` (Alibaba, public)           | Rented Vast.ai 4× A100 |
+| `gpt-oss:120b`       | `ollama pull gpt-oss:120b` (OpenAI weights release)     | Rented Vast.ai 4× A100 |
+| `deepseek-v3.1:671b` | `ollama pull deepseek-v3.1:671b` (DeepSeek, public)     | Rented Vast.ai 4× A100 |
+| `deepseek-v4-flash`  | DeepSeek hosted API, model name `deepseek-v4-flash`     | Hosted endpoint |
+
+For exact byte-level reproducibility, pin the Ollama Modelfile digest
+shown by `ollama show <tag> --modelfile` after pulling. LLM outputs are
+not byte-deterministic across vLLM / Ollama versions even at
+`temperature=0`, so reviewers should expect ≤1% drift on the binary
+metrics in `eval_perturbation_v3.json` even when serving the same tag.
 

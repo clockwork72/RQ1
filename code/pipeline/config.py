@@ -1,4 +1,4 @@
-"""Configuration for PoliReasoner."""
+"""Pipeline configuration: env-driven settings for the extractor + verifier."""
 
 import os
 from pathlib import Path
@@ -31,7 +31,7 @@ EXTRACTION_BACKEND = os.environ.get("EXTRACTION_BACKEND", DEFAULT_EXTRACTION_BAC
 
 # Model config
 ANTHROPIC_EXTRACTION_MODEL = os.environ.get("ANTHROPIC_EXTRACTION_MODEL", "claude-sonnet-4-20250514")
-OPENAI_EXTRACTION_MODEL = os.environ.get("OPENAI_EXTRACTION_MODEL", "gpt-5.2-2025-12-11")
+OPENAI_EXTRACTION_MODEL = os.environ.get("OPENAI_EXTRACTION_MODEL", "gpt-4o")
 
 # llama.cpp / local backend (OpenAI-compatible API served by llama-server)
 LLAMACPP_BASE_URL = os.environ.get("LLAMACPP_BASE_URL", "http://localhost:8930/v1")

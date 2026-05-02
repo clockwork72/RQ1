@@ -3,81 +3,76 @@
 Reproducibility package for *When Policies Disagree: A Cross-Policy Audit of
 GDPR Transparency on the Web* (CCS '26).
 
-```
-.
-├── data/
-│   └── dataset.tar.gz          # bundled raw data — extracted on first notebook run
-├── notebooks/
-│   ├── RQ1.ipynb               # availability, length, readability  (Findings.tex §RQ1)
-│   ├── RQ2.ipynb               # GDPR completeness                  (Findings.tex §RQ2)
-│   ├── RQ3.ipynb               # cross-policy inconsistency         (Findings.tex §RQ3)
-│   ├── Evaluation.ipynb        # extractor / verifier evaluation    (Evaluation.tex + Appendix.tex)
-│   └── Classifier.ipynb        # GDPR-classifier benchmark + Fig 1  (Appendix.tex)
-├── code/
-│   ├── prompts/                # unified prompt registry (single source of truth)
-│   ├── pipeline/               # vendored extractor + verifier
-│   ├── llm_serving/            # 2× A100 vLLM / Ollama setup
-│   ├── scripts/                # CLIs: run_extraction, run_verification, train_roberta
-│   ├── requirements.txt
-│   ├── requirements-server.txt
-│   └── .env.example
-├── gdpr_classifier/            # RoBERTa GDPR classifier: trainer, dataset, weights, results
-└── scraper/                    # methodology reference for the FP/TP crawler (see scraper/README.md)
-```
+This README is a directory. Each top-level folder has its own README with the
+detail; below is a one-line pointer to each.
 
-## Quickstart — verify the paper numbers without any GPU
+## Notebooks (`notebooks/`)
 
-```bash
-git clone <repo>
-cd When-Policies-Disagree
+Five Jupyter notebooks that reproduce the paper's numbers and figures from
+`data/dataset.tar.gz`. Each one ends in a sanity-check cell that prints
+`PASSED` when every reproduced value matches the paper.
 
-python -m venv .venv && source .venv/bin/activate
-pip install -r code/requirements.txt
+* [`notebooks/RQ1.ipynb`](notebooks/RQ1.ipynb) — Findings §RQ1: policy
+  availability, length, and readability for first parties (FPs) and third
+  parties (TPs). Generates the FP / TP availability bar charts, the FKGL +
+  word-count panels, and the §4.3 ecosystem-density heatmap.
+* [`notebooks/RQ2.ipynb`](notebooks/RQ2.ipynb) — Findings §RQ2: GDPR
+  transparency-category coverage per policy. Generates the per-category
+  coverage table and the GDPR vs. length / readability figure.
+* [`notebooks/RQ3.ipynb`](notebooks/RQ3.ipynb) — Findings §RQ3:
+  cross-policy inconsistencies on the random-2 sample. Generates the
+  combined verdict-and-GDPR figure used in the paper.
+* [`notebooks/Evaluation.ipynb`](notebooks/Evaluation.ipynb) —
+  Evaluation.tex + Appendix.tex: extractor leaderboard, verifier
+  perturbation, verdict agreement, plus per-field accuracy and
+  per-action F1.
+* [`notebooks/Classifier.ipynb`](notebooks/Classifier.ipynb) —
+  Appendix.tex: GDPR classifier benchmark (RoBERTa vs. BERT-base vs.
+  Legal-BERT) and the overall-comparison figure.
 
-jupyter nbconvert --to notebook --execute --inplace notebooks/RQ1.ipynb
-jupyter nbconvert --to notebook --execute --inplace notebooks/RQ2.ipynb
-jupyter nbconvert --to notebook --execute --inplace notebooks/RQ3.ipynb
-jupyter nbconvert --to notebook --execute --inplace notebooks/Evaluation.ipynb
-```
+## Pipeline code (`code/`)
 
-Each notebook starts by extracting `data/dataset.tar.gz` (a 103 MB tarball
-containing the crawl results, per-policy GDPR coverage, and the cross-policy
-findings) into `data/raw/` and then computes everything from those raw files.
-Each notebook ends with a sanity-check cell that prints every reproduced
-number side-by-side with the value reported in the paper and reports
-`PASSED` if every check matches.
+* [`code/pipeline/README.md`](code/pipeline/README.md) — the extractor +
+  verifier engine. Walks through the segment → extract → normalize →
+  scope → graph → patterns → verify flow, lists every module, and points
+  at the env vars in `config.py`.
+* [`code/prompts/unified_prompts.py`](code/prompts/unified_prompts.py) —
+  single source of truth for every LLM prompt: `EXTRACTION_PROMPT`,
+  `EXTRACTION_PROMPT_FEWSHOT`, `REFLECTION_RECOVERY_PROMPT`,
+  `REFLECTION_EXHAUSTION_PROMPT`, `VERIFIER_PROMPT`,
+  `VERIFIER_PROMPT_LEGACY`.
+* [`code/scripts/`](code/scripts) — three CLIs that wrap the pipeline:
+  `run_extraction.py` (extract PPSes from one policy), `run_verification.py`
+  (run the four cross-policy patterns + verifier on a list of FP/TP pairs),
+  `train_roberta.py` (re-train the GDPR classifier; companion to
+  `gdpr_classifier/`).
+* [`code/llm_serving/README.md`](code/llm_serving/README.md) — how we
+  served the local LLMs (2× A100 vLLM / Ollama). Larger models
+  (`qwen3-vl:235b`, `gpt-oss:120b`, `deepseek-v3.1:671b`) ran on rented
+  Vast.ai instances behind the same OpenAI-compatible endpoint.
+* [`code/figures/`](code/figures) — canonical paper-figure scripts called
+  by the notebooks. `WPD_FIGURE_DIR` env var redirects output (the
+  notebooks point it at `notebooks/figures/`).
 
-## Reproducing the inconsistency-detection pipeline end-to-end
+## Scraper (`scraper/`)
 
-You will need a GPU. We ran on **2× NVIDIA A100 80 GB**.
+[`scraper/README.md`](scraper/README.md) — the crawler that produced
+`data/dataset.tar.gz`. Methodology only (Tranco filtering →
+homepage fetch → policy discovery → robust-fallback → policy extraction →
+third-party observation via Tracker Radar / TrackerDB → TP-policy fetch).
+Operator scripts (Slurm, sharding, dashboards) are intentionally omitted.
 
-```bash
-# 1) Start a local LLM
-bash code/llm_serving/serve_vllm.sh        # default: gemma3:27b across both A100s
+## GDPR classifier (`gdpr_classifier/`)
 
-# 2) Point the pipeline at it
-cp code/.env.example code/.env             # the defaults already target localhost
-source code/llm_serving/env_local.sh
+[`gdpr_classifier/TRAINING_README.md`](gdpr_classifier/TRAINING_README.md) —
+trainer + dataset + per-model evaluation outputs for the 18-category
+GDPR transparency classifier. The 476 MB fine-tuned RoBERTa weights are
+released separately on the GitHub release page.
 
-# 3) Run the verifier on a list of (FP, TP) pairs
-python code/scripts/run_verification.py \
-    --pairs       data/sample_pairs.csv \
-    --extractions data/extractions/ \
-    --out         findings_local.csv
-```
+## Dataset (`data/`)
 
-`code/llm_serving/README.md` documents the hardware and the alternative
-hosted-API path.
-
-## Hardware
-
-The full run reported in the paper used **2× NVIDIA A100 80 GB** (NVLink),
-256 GB host RAM, CUDA 12.4, vLLM 0.6.x. Models that exceed that envelope
-(`qwen3-vl:235b`, `gpt-oss:120b`, `deepseek-v3.1:671b`) were served on
-rented GPU instances from **Vast.ai** behind an OpenAI-compatible endpoint —
-the same env vars switch between local and rented serving with no code
-changes.
-
-## Dataset
-
-See [`data/README.md`](data/README.md) for the contents of `dataset.tar.gz`.
+[`data/README.md`](data/README.md) — manifest of `dataset.tar.gz`: crawl
+results, per-policy GDPR coverage, the 5,372-pair random-2 sample, the
+19,692-row `findings.csv`, the 12,042-row `findings_verified.csv`
+(curated, inconsistent verdicts only), and the evaluation benchmark
+files.

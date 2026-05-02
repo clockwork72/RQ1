@@ -79,9 +79,3 @@ changes.
 ## Dataset
 
 See [`data/README.md`](data/README.md) for the contents of `dataset.tar.gz`.
-
-## Issues / questions
-
-If a sanity-check cell prints something that does not match what the paper
-says, that is the most useful kind of bug report — please attach the cell
-output when filing an issue.

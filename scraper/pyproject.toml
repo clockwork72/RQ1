@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "privacy-research-dataset"
+version = "0.1.0"
+description = "Methodology reference for the FP/TP privacy-policy crawler used in 'When Policies Disagree'."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+dependencies = [
+  "crawl4ai>=0.7.0",
+  "tldextract>=5.1.0",
+  "beautifulsoup4>=4.12.3",
+  "lxml>=5.2.2",
+  "chardet>=5.2.0,<6",
+  "aiohttp>=3.9",
+  "trafilatura>=1.12.0",
+  "readability-lxml>=0.8.1",
+  "regex>=2024.0",
+  "rapidfuzz>=3.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["privacy_research_dataset*"]

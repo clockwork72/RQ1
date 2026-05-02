@@ -12,14 +12,15 @@ GDPR Transparency on the Web* (CCS '26).
 │   ├── RQ2.ipynb               # GDPR completeness                  (Findings.tex §RQ2)
 │   ├── RQ3.ipynb               # cross-policy inconsistency         (Findings.tex §RQ3)
 │   └── Evaluation.ipynb        # extractor / verifier evaluation    (Evaluation.tex + Appendix.tex)
-└── code/
-    ├── prompts/                # unified prompt registry (single source of truth)
-    ├── pipeline/               # vendored extractor + verifier
-    ├── llm_serving/            # 2× A100 vLLM / Ollama setup
-    ├── scripts/                # CLIs: run_extraction, run_verification, train_roberta
-    ├── requirements.txt
-    ├── requirements-server.txt
-    └── .env.example
+├── code/
+│   ├── prompts/                # unified prompt registry (single source of truth)
+│   ├── pipeline/               # vendored extractor + verifier
+│   ├── llm_serving/            # 2× A100 vLLM / Ollama setup
+│   ├── scripts/                # CLIs: run_extraction, run_verification, train_roberta
+│   ├── requirements.txt
+│   ├── requirements-server.txt
+│   └── .env.example
+└── scraper/                    # methodology reference for the FP/TP crawler (see scraper/README.md)
 ```
 
 ## Quickstart — verify the paper numbers without any GPU

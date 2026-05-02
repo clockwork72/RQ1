@@ -28,11 +28,3 @@ run.
 * `benchmarks/eval_per_field_action_v3.json` — per-field accuracy and per-action P/R/F1 for the 7 paper-reported configurations.
 * `benchmarks/eval_perturbation_v3.json` — per-model verifier metrics on the 100 synthetic perturbation cases (3-class + binary view).
 * `benchmarks/eval_verdict_agreement_v7.json` — per-model verdicts of three verifiers on real findings (input to the agreement table).
-
-## Provenance
-
-Every file here was produced by the pipeline in `code/` against the Tranco top
-16,100 (snapshot date and seed are recorded in `results.summary.json`). The
-extractor and verifier model choices behind each artifact are documented in
-`Evaluation.tex` of the paper and reproduced from the raw outputs by
-`notebooks/Evaluation.ipynb`.

@@ -3,7 +3,7 @@
 #
 # This reproduces the runtime we used to detect inconsistencies in the paper:
 # every script in this repo speaks the OpenAI chat-completions protocol, so
-# pointing OLLAMA_PRO_BASE_URL at http://localhost:8000/v1 is enough — no code
+# pointing LLM_BASE_URL at http://localhost:8000/v1 is enough — no code
 # changes required.
 #
 # Default model: gemma3:27b (the verifier we used for the production findings).

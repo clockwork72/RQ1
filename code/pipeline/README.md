@@ -85,8 +85,9 @@ analysis used in RQ2.
 Everything you'd plausibly want to flip lives in environment variables read
 by `config.py`. The most common ones:
 
-* `OLLAMA_PRO_BASE_URL`, `OLLAMA_PRO_API_KEY` — OpenAI-compatible endpoint
-  for the extractor / verifier.
+* `LLM_BASE_URL`, `LLM_API_KEY`, `LLM_MODEL` — OpenAI-compatible endpoint
+  for the extractor / verifier (a local 2× A100 server or a rented Vast.ai
+  4× A100 instance, both speaking the same /v1 protocol).
 * `EXTRACTION_BACKEND`, `EXTRACTION_PROMPT_VERSION`,
   `VERIFIER_PROMPT_VERSION` — which prompt strings (in
   `code/prompts/unified_prompts.py`) to use.

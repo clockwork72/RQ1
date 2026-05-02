@@ -44,9 +44,9 @@ from .config import (
     LLAMACPP_BASE_URL,
     LLAMACPP_MODEL_NAME,
     MAX_RETRIES,
-    OLLAMA_PRO_API_KEY,
-    OLLAMA_PRO_BASE_URL,
-    OLLAMA_PRO_MODEL,
+    LLM_API_KEY,
+    LLM_BASE_URL,
+    LLM_MODEL,
     OPENAI_API_KEY,
     OPENAI_EXTRACTION_MODEL,
     VERIFIER_BACKEND,
@@ -224,8 +224,8 @@ def _active_verifier_model() -> str:
         return f"openai:{OPENAI_EXTRACTION_MODEL}"
     if _VERIFIER_BACKEND == "llamacpp":
         return f"llamacpp:{VERIFIER_MODEL_NAME}"
-    if _VERIFIER_BACKEND == "ollamapro":
-        return f"ollamapro:{OLLAMA_PRO_MODEL}"
+    if _VERIFIER_BACKEND == "openai_compat":
+        return f"openai_compat:{LLM_MODEL}"
     return _VERIFIER_BACKEND
 
 
@@ -256,14 +256,14 @@ def _save_cache(pattern_id: str, s1_id: str, s2_id: str, result: dict) -> None:
 
 
 def _create_client():
-    # Per-request HTTP timeout. Default OpenAI-SDK timeout is 600s — when
-    # Ollama Pro's upstream socket wedges (seen on the 2026-04-24 random2
+    # Per-request HTTP timeout. Default OpenAI-SDK timeout is 600s — when a
+    # remote endpoint's upstream socket wedges (seen on the 2026-04-24 random2
     # run: one worker stuck 10 min on a silent TCP read that never came
     # back, heartbeat frozen, 78→79 pair progress stalled), that 600s is
     # the full cost of one hang. Cap at 60s so a hung call raises quickly
     # and the verifier's own retry logic (MAX_RETRIES=3 with exponential
     # backoff) recovers without stalling the pipeline. Applies to every
-    # OpenAI-compatible backend (openai, llamacpp, ollamapro).
+    # OpenAI-compatible backend (openai, llamacpp, openai_compat).
     _REQUEST_TIMEOUT_S = 60
     if _VERIFIER_BACKEND == "anthropic":
         if anthropic is None:
@@ -288,13 +288,13 @@ def _create_client():
             base_url=VERIFIER_BASE_URL, api_key="not-needed",
             timeout=_REQUEST_TIMEOUT_S,
         )
-    if _VERIFIER_BACKEND == "ollamapro":
+    if _VERIFIER_BACKEND == "openai_compat":
         if OpenAI is None:
-            raise RuntimeError("openai package not installed (needed for ollamapro backend)")
-        if not OLLAMA_PRO_API_KEY:
-            raise RuntimeError("OLLAMA_PRO_API_KEY not set")
+            raise RuntimeError("openai package not installed (needed for the openai_compat backend)")
+        if not LLM_API_KEY:
+            raise RuntimeError("LLM_API_KEY not set")
         return OpenAI(
-            base_url=OLLAMA_PRO_BASE_URL, api_key=OLLAMA_PRO_API_KEY,
+            base_url=LLM_BASE_URL, api_key=LLM_API_KEY,
             timeout=_REQUEST_TIMEOUT_S,
         )
     raise RuntimeError(f"Unsupported VERIFIER_BACKEND '{_VERIFIER_BACKEND}'")
@@ -336,9 +336,9 @@ def _call_model(client, prompt: str) -> str:
                 temperature=0.0,
             )
         return response.choices[0].message.content.strip()
-    if _VERIFIER_BACKEND == "ollamapro":
+    if _VERIFIER_BACKEND == "openai_compat":
         response = client.chat.completions.create(
-            model=OLLAMA_PRO_MODEL,
+            model=LLM_MODEL,
             messages=[{"role": "user", "content": prompt}],
             max_tokens=512,
             temperature=0.0,
@@ -699,7 +699,8 @@ def verify_candidates(
 
     Args:
         max_workers: Number of concurrent threads for API calls. Use 1 for
-            sequential (default), 4-8 for concurrent Ollama Pro / cloud APIs.
+            sequential (default), 4-8 for concurrent remote endpoints (e.g.
+            a rented Vast.ai 4× A100 instance behind /v1).
         policy_texts: Optional {pair_id: {"first_party": str, "third_party": str}}
             mapping used to extract surrounding paragraphs for each clause.
             Strongly recommended — matches the deep-audit protocol where the

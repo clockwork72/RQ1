@@ -1,8 +1,9 @@
 """Post-extraction scope classifier for PPS statements.
 
 Assigns a product/feature scope to each PPS based on its source text.
-Uses an LLM (via Ollama Pro or llama.cpp) for accuracy, with a regex
-fallback for speed when no LLM is available.
+Uses an LLM (via a local 2× A100 server or a rented Vast.ai 4× A100
+endpoint, both speaking the OpenAI-compatible /v1 protocol) for accuracy,
+with a regex fallback for speed when no LLM is available.
 
 The scope is used in pattern matching to prevent cross-context
 comparisons: a donation-context clause should not be compared against

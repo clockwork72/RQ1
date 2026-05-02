@@ -1,10 +1,10 @@
 """Extract Privacy Practice Statements (PPSes) from a privacy-policy text file.
 
 Wraps `pipeline.extractor.extract_pps_from_text`, which speaks the OpenAI
-chat-completions protocol and is configured via the same `OLLAMA_PRO_BASE_URL`
-+ `OLLAMA_PRO_API_KEY` env vars used by the production pipeline. Point those
-at a local server (`source llm_serving/env_local.sh`) or at a hosted endpoint
-(`https://ollama.com/v1`).
+chat-completions protocol and is configured via the `LLM_BASE_URL` +
+`LLM_API_KEY` env vars used by the production pipeline. Point those at a
+local 2× A100 server (`source llm_serving/env_local.sh`) or at a rented
+Vast.ai 4× A100 instance exposing the same OpenAI-compatible /v1 endpoint.
 
 Output: one JSON file per input policy at `<out>/<policy_id>_extraction.json`,
 matching the schema shipped at `data/extractions.tar.gz`.

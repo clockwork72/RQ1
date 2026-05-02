@@ -1,3 +1,4 @@
 # Only needed if you want to host the LLM yourself (llm_serving/serve_vllm.sh).
-# Skip this file if you point OLLAMA_PRO_BASE_URL at a hosted endpoint.
+# Skip this file if you point LLM_BASE_URL at a remote endpoint (e.g. a
+# rented Vast.ai 4× A100 instance).
 vllm>=0.6

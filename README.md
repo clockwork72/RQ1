@@ -3,76 +3,87 @@
 Reproducibility package for *When Policies Disagree: A Cross-Policy Audit of
 GDPR Transparency on the Web* (CCS '26).
 
-This README is a directory. Each top-level folder has its own README with the
-detail; below is a one-line pointer to each.
+```
+.
+├── data/                       # bundled raw data — extracted on first notebook run
+│   ├── dataset.tar.gz
+│   └── README.md
+├── notebooks/                  # one notebook per research question + evaluation + classifier
+│   ├── RQ1.ipynb
+│   ├── RQ2.ipynb
+│   ├── RQ3.ipynb
+│   ├── Evaluation.ipynb
+│   └── Classifier.ipynb
+├── code/
+│   ├── pipeline/               # extractor + verifier engine
+│   ├── prompts/
+│   ├── llm_serving/
+│   ├── scripts/
+│   └── figures/
+├── gdpr_classifier/            # RoBERTa GDPR-coverage classifier (trainer, dataset, results)
+└── scraper/                    # crawler that produced data/dataset.tar.gz
+```
 
-## Notebooks (`notebooks/`)
+## [`notebooks/`](notebooks)
 
-Five Jupyter notebooks that reproduce the paper's numbers and figures from
-`data/dataset.tar.gz`. Each one ends in a sanity-check cell that prints
-`PASSED` when every reproduced value matches the paper.
+Five Jupyter notebooks that reproduce every paper number and figure from
+`data/dataset.tar.gz`. Each one extracts the bundle on first run and ends
+with a sanity-check cell that prints `PASSED` when every reproduced value
+matches the value reported in the paper.
 
-* [`notebooks/RQ1.ipynb`](notebooks/RQ1.ipynb) — Findings §RQ1: policy
-  availability, length, and readability for first parties (FPs) and third
-  parties (TPs). Generates the FP / TP availability bar charts, the FKGL +
-  word-count panels, and the §4.3 ecosystem-density heatmap.
-* [`notebooks/RQ2.ipynb`](notebooks/RQ2.ipynb) — Findings §RQ2: GDPR
-  transparency-category coverage per policy. Generates the per-category
-  coverage table and the GDPR vs. length / readability figure.
-* [`notebooks/RQ3.ipynb`](notebooks/RQ3.ipynb) — Findings §RQ3:
-  cross-policy inconsistencies on the random-2 sample. Generates the
-  combined verdict-and-GDPR figure used in the paper.
-* [`notebooks/Evaluation.ipynb`](notebooks/Evaluation.ipynb) —
-  Evaluation.tex + Appendix.tex: extractor leaderboard, verifier
-  perturbation, verdict agreement, plus per-field accuracy and
-  per-action F1.
-* [`notebooks/Classifier.ipynb`](notebooks/Classifier.ipynb) —
-  Appendix.tex: GDPR classifier benchmark (RoBERTa vs. BERT-base vs.
-  Legal-BERT) and the overall-comparison figure.
+* `RQ1.ipynb` — policy availability, length, and readability for first
+  parties and third parties (Findings §RQ1, plus the §4.3 ecosystem-density
+  heatmap).
+* `RQ2.ipynb` — GDPR transparency-category coverage per policy
+  (Findings §RQ2 table and the GDPR vs. length / readability figure).
+* `RQ3.ipynb` — cross-policy inconsistencies on the random-2 sample
+  (Findings §RQ3, including the combined verdict-and-GDPR figure).
+* `Evaluation.ipynb` — the three appendix evaluation tables and their
+  per-field / per-action breakdowns. The leaderboard table (Evaluation §4.1)
+  was used to **choose the extractor model**; the verifier perturbation
+  table (Evaluation §4.2.1) was used to **choose the verifier model**; the
+  verdict-agreement table (Evaluation §4.2.2) shows that the architecture
+  is robust — swapping the verifier still produces the same verdict on
+  most candidates.
+* `Classifier.ipynb` — Appendix.tex GDPR classifier benchmark (RoBERTa vs.
+  BERT-base vs. Legal-BERT) and the overall-comparison figure.
 
-## Pipeline code (`code/`)
+## [`code/pipeline/`](code/pipeline)
 
-* [`code/pipeline/README.md`](code/pipeline/README.md) — the extractor +
-  verifier engine. Walks through the segment → extract → normalize →
-  scope → graph → patterns → verify flow, lists every module, and points
-  at the env vars in `config.py`.
-* [`code/prompts/unified_prompts.py`](code/prompts/unified_prompts.py) —
-  single source of truth for every LLM prompt: `EXTRACTION_PROMPT`,
-  `EXTRACTION_PROMPT_FEWSHOT`, `REFLECTION_RECOVERY_PROMPT`,
-  `REFLECTION_EXHAUSTION_PROMPT`, `VERIFIER_PROMPT`,
-  `VERIFIER_PROMPT_LEGACY`.
-* [`code/scripts/`](code/scripts) — three CLIs that wrap the pipeline:
-  `run_extraction.py` (extract PPSes from one policy), `run_verification.py`
-  (run the four cross-policy patterns + verifier on a list of FP/TP pairs),
-  `train_roberta.py` (re-train the GDPR classifier; companion to
-  `gdpr_classifier/`).
-* [`code/llm_serving/README.md`](code/llm_serving/README.md) — how we
-  served the local LLMs (2× A100 vLLM / Ollama). Larger models
-  (`qwen3-vl:235b`, `gpt-oss:120b`, `deepseek-v3.1:671b`) ran on rented
-  Vast.ai instances behind the same OpenAI-compatible endpoint.
-* [`code/figures/`](code/figures) — canonical paper-figure scripts called
-  by the notebooks. `WPD_FIGURE_DIR` env var redirects output (the
-  notebooks point it at `notebooks/figures/`).
+The extractor + verifier engine. Walks each (FP, TP) pair through clause
+segmentation, LLM-based PPS extraction, ontology normalization, scope
+classification, knowledge-graph construction, four cross-policy pattern
+detectors (Π₁ Modality Contradiction, Π₂ Exclusivity Violation,
+Π₃ Condition Asymmetry, Π₄ Temporal Contradiction), and an LLM verifier
+that produces the final 3-class verdict
+(`inconsistent` / `unspecified` / `non_conflict`). See the folder's own
+[`README.md`](code/pipeline/README.md) for the full per-step flow and the
+file-level map.
 
-## Scraper (`scraper/`)
+## [`scraper/`](scraper)
 
-[`scraper/README.md`](scraper/README.md) — the crawler that produced
-`data/dataset.tar.gz`. Methodology only (Tranco filtering →
-homepage fetch → policy discovery → robust-fallback → policy extraction →
-third-party observation via Tracker Radar / TrackerDB → TP-policy fetch).
-Operator scripts (Slurm, sharding, dashboards) are intentionally omitted.
+The crawler that produced `data/dataset.tar.gz`. Walks each Tranco domain
+through homepage fetch, policy discovery, robust fallback (SPA hints +
+realistic User-Agents + Wayback), policy-text extraction, and third-party
+observation via DuckDuckGo Tracker Radar / TrackerDB. Methodology only —
+operator scripts (Slurm, sharding, dashboards) are intentionally omitted.
+See the folder's own [`README.md`](scraper/README.md) for the per-stage
+description and the file map.
 
-## GDPR classifier (`gdpr_classifier/`)
+## [`gdpr_classifier/`](gdpr_classifier)
 
-[`gdpr_classifier/TRAINING_README.md`](gdpr_classifier/TRAINING_README.md) —
-trainer + dataset + per-model evaluation outputs for the 18-category
-GDPR transparency classifier. The 476 MB fine-tuned RoBERTa weights are
-released separately on the GitHub release page.
+Trainer + dataset + per-model evaluation outputs for the 18-category GDPR
+transparency classifier described in `Appendix.tex`. Ships the Rahat et al.
+(WPES'22) dataset and the result JSONs the notebook reads; the 476 MB
+fine-tuned RoBERTa weights are released separately on the GitHub release
+page so reviewers can download once and skip training. See the folder's
+own [`TRAINING_README.md`](gdpr_classifier/TRAINING_README.md) for
+re-training and re-evaluation instructions.
 
-## Dataset (`data/`)
+## [`data/`](data)
 
-[`data/README.md`](data/README.md) — manifest of `dataset.tar.gz`: crawl
-results, per-policy GDPR coverage, the 5,372-pair random-2 sample, the
-19,692-row `findings.csv`, the 12,042-row `findings_verified.csv`
-(curated, inconsistent verdicts only), and the evaluation benchmark
-files.
+Manifest of `dataset.tar.gz`: crawl results, per-policy GDPR coverage, the
+5,372-pair random-2 sample, the 19,692-row `findings.csv`, the
+12,042-row `findings_verified.csv` (curated, inconsistent verdicts only),
+and the evaluation benchmark files. See the folder's own
+[`README.md`](data/README.md) for the per-file description.

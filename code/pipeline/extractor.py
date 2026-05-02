@@ -36,9 +36,9 @@ from .config import (
     MAX_CLAUSE_LENGTH,
     MAX_RETRIES,
     MIN_CLAUSE_LENGTH,
-    OLLAMA_PRO_API_KEY,
-    OLLAMA_PRO_BASE_URL,
-    OLLAMA_PRO_MODEL,
+    LLM_API_KEY,
+    LLM_BASE_URL,
+    LLM_MODEL,
     OPENAI_API_KEY,
     OPENAI_EXTRACTION_MODEL,
 )
@@ -1002,8 +1002,8 @@ def _active_model_name() -> str:
         return OPENAI_EXTRACTION_MODEL
     if EXTRACTION_BACKEND == "llamacpp":
         return f"llamacpp:{LLAMACPP_MODEL_NAME}"
-    if EXTRACTION_BACKEND == "ollamapro":
-        return f"ollamapro:{OLLAMA_PRO_MODEL}"
+    if EXTRACTION_BACKEND == "openai_compat":
+        return f"openai_compat:{LLM_MODEL}"
     if EXTRACTION_BACKEND == "squad":
         # Identity-hash over the specialist + NER checkpoint mtimes so the
         # clause cache invalidates when any head is retrained.
@@ -2011,17 +2011,18 @@ def _create_extraction_client():
             )
         return OpenAI(base_url=LLAMACPP_BASE_URL, api_key="not-needed")
 
-    if EXTRACTION_BACKEND == "ollamapro":
+    if EXTRACTION_BACKEND == "openai_compat":
         if OpenAI is None:
             raise RuntimeError(
-                "The 'openai' package is not installed (needed for ollamapro backend). "
+                "The 'openai' package is not installed (needed for the openai_compat backend). "
                 "Run 'pip install -r requirements.txt' first."
             )
-        if not OLLAMA_PRO_API_KEY:
+        if not LLM_API_KEY:
             raise RuntimeError(
-                "OLLAMA_PRO_API_KEY is not set. Extraction via Ollama Pro requires a valid API key."
+                "LLM_API_KEY is not set. The openai_compat backend (local 2× A100 server "
+                "or rented Vast.ai 4× A100 endpoint) requires a key."
             )
-        return OpenAI(base_url=OLLAMA_PRO_BASE_URL, api_key=OLLAMA_PRO_API_KEY)
+        return OpenAI(base_url=LLM_BASE_URL, api_key=LLM_API_KEY)
 
     if EXTRACTION_BACKEND == "squad":
         # The squad needs no HTTP client — it loads DeBERTa heads locally.
@@ -2031,7 +2032,7 @@ def _create_extraction_client():
 
     raise RuntimeError(
         f"Unsupported EXTRACTION_BACKEND '{EXTRACTION_BACKEND}'. "
-        f"Use 'anthropic', 'openai', 'llamacpp', or 'ollamapro'."
+        f"Use 'anthropic', 'openai', 'llamacpp', or 'openai_compat'."
     )
 
 
@@ -2083,9 +2084,9 @@ def _call_extraction_model_multiturn(client, messages: list[dict]) -> str:
         )
         return response.choices[0].message.content.strip()
 
-    if EXTRACTION_BACKEND == "ollamapro":
+    if EXTRACTION_BACKEND == "openai_compat":
         response = client.chat.completions.create(
-            model=OLLAMA_PRO_MODEL,
+            model=LLM_MODEL,
             messages=messages,
             max_tokens=EXTRACTION_MAX_TOKENS,
             temperature=EXTRACTION_TEMPERATURE,
@@ -2252,9 +2253,9 @@ def _call_extraction_model(client, prompt: str) -> str:
         )
         return response.choices[0].message.content.strip()
 
-    if EXTRACTION_BACKEND == "ollamapro":
+    if EXTRACTION_BACKEND == "openai_compat":
         response = client.chat.completions.create(
-            model=OLLAMA_PRO_MODEL,
+            model=LLM_MODEL,
             messages=[{"role": "user", "content": prompt}],
             max_tokens=EXTRACTION_MAX_TOKENS,
             temperature=EXTRACTION_TEMPERATURE,

@@ -37,10 +37,12 @@ OPENAI_EXTRACTION_MODEL = os.environ.get("OPENAI_EXTRACTION_MODEL", "gpt-5.2-202
 LLAMACPP_BASE_URL = os.environ.get("LLAMACPP_BASE_URL", "http://localhost:8930/v1")
 LLAMACPP_MODEL_NAME = os.environ.get("LLAMACPP_MODEL_NAME", "qwen25-72b")
 
-# Ollama Pro / Ollama Cloud backend (OpenAI-compatible API)
-OLLAMA_PRO_API_KEY = os.environ.get("OLLAMA_PRO_API_KEY", "")
-OLLAMA_PRO_BASE_URL = os.environ.get("OLLAMA_PRO_BASE_URL", "https://ollama.com/v1")
-OLLAMA_PRO_MODEL = os.environ.get("OLLAMA_PRO_MODEL", "qwen3-next:80b")
+# OpenAI-compatible HTTP backend.
+# Either a local server on a 2× A100 box (see llm_serving/serve_vllm.sh) or a
+# rented 4× A100 instance on Vast.ai exposing the same /v1 endpoint.
+LLM_API_KEY = os.environ.get("LLM_API_KEY", "")
+LLM_BASE_URL = os.environ.get("LLM_BASE_URL", "http://localhost:8000/v1")
+LLM_MODEL = os.environ.get("LLM_MODEL", "gemma3:27b")
 
 # Verifier config — defaults to Qwen2.5-14B-Instruct on its own llama-server.
 # Qwen2.5-14B won the in-house verification benchmark (87% acc, balanced F1

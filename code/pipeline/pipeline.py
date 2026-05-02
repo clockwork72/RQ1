@@ -351,7 +351,7 @@ def _inconsistency_priority(item: dict) -> tuple[int, int, int, int, int, str]:
         "underspecified": 2,
         "non_conflict": 1,
     }.get(item["verdict"], 0)
-    pattern_score = {"Π₈": 8, "Π₁": 5, "Π₄": 4, "Π₅": 4, "Π₂": 4}.get(
+    pattern_score = {"Π₁": 5, "Π₂": 4, "Π₃": 4, "Π₄": 4}.get(
         item["pattern_id"], 0
     )
     evidence_score = _statement_quality_score(item["statement_1"]) + _statement_quality_score(

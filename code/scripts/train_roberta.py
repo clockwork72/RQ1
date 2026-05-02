@@ -20,7 +20,9 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO_ROOT / "code"))
 
 import argparse
 import ast
@@ -28,7 +30,6 @@ import csv
 import json
 import os
 import time
-from pathlib import Path
 
 import numpy as np
 import torch
@@ -38,9 +39,9 @@ from torch.utils.data import Dataset, DataLoader, WeightedRandomSampler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score, precision_score, recall_score
 
-from schema import GDPR_CATEGORIES
+from pipeline.schema import GDPR_CATEGORIES
 
-DATASET_PATH = Path(__file__).resolve().parent.parent / "gdpr-dataset" / "gdpr_dataset_1.2.csv"
+DATASET_PATH = REPO_ROOT / "gdpr_classifier" / "data" / "gdpr_dataset_1.2.csv"
 LABEL2IDX = {label: i for i, label in enumerate(sorted(GDPR_CATEGORIES))}
 IDX2LABEL = {i: label for label, i in LABEL2IDX.items()}
 NUM_LABELS = len(GDPR_CATEGORIES)

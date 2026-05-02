@@ -44,14 +44,17 @@ LLM_API_KEY = os.environ.get("LLM_API_KEY", "")
 LLM_BASE_URL = os.environ.get("LLM_BASE_URL", "http://localhost:8000/v1")
 LLM_MODEL = os.environ.get("LLM_MODEL", "gemma3:27b")
 
-# Verifier config — defaults to Qwen2.5-14B-Instruct on its own llama-server.
-# Qwen2.5-14B won the in-house verification benchmark (87% acc, balanced F1
-# across inconsistent / underspecified / non_conflict); see
-# data/benchmarks/eval_verification_qwen14b_v2.json. Non-reasoning per project
-# constraint. Runs on a separate llama-server (different port) from extraction.
-VERIFIER_BACKEND = os.environ.get("VERIFIER_BACKEND", "llamacpp").strip().lower() or "llamacpp"
-VERIFIER_BASE_URL = os.environ.get("VERIFIER_BASE_URL", "http://localhost:8931/v1")
-VERIFIER_MODEL_NAME = os.environ.get("VERIFIER_MODEL_NAME", "qwen25-14b")
+# Verifier config. The paper's chosen verifier is gemma3:27b (best 3-class
+# accuracy and binary macro-F1 on the 100-case perturbation benchmark — see
+# Evaluation §4.2.1 and `data/raw/benchmarks/eval_perturbation_v3.json`).
+# When `VERIFIER_BACKEND=openai_compat` (the default in `.env.example` and
+# `llm_serving/env_local.sh`), the verifier reuses LLM_BASE_URL / LLM_MODEL,
+# so a single served model handles both extraction and verification. The
+# `llamacpp` backend below points at a separate llama-server (different
+# port) and is the production setup we used to keep extraction unblocked.
+VERIFIER_BACKEND = os.environ.get("VERIFIER_BACKEND", "openai_compat").strip().lower() or "openai_compat"
+VERIFIER_BASE_URL = os.environ.get("VERIFIER_BASE_URL", LLM_BASE_URL)
+VERIFIER_MODEL_NAME = os.environ.get("VERIFIER_MODEL_NAME", LLM_MODEL)
 
 EXTRACTION_TEMPERATURE = 0.0
 EXTRACTION_MAX_TOKENS = 4096

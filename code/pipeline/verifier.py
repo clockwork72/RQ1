@@ -210,14 +210,13 @@ def _active_verifier_model() -> str:
     """Return a stable identifier for the currently-selected verifier model.
 
     Used to bind cache entries to (backend, model) so switching models
-    invalidates stale verdicts instead of serving them silently. Prior to
-    2026-04-19 the cache key was prompt-version-only — swapping
-    ``VERIFIER_MODEL_NAME`` from qwen25-14b to qwen25-72b returned
-    qwen25-14b verdicts from cache. See audit F102.
+    invalidates stale verdicts instead of serving them silently — without
+    this, swapping ``VERIFIER_MODEL_NAME`` would return the previous
+    model's verdicts from cache.
     """
     if _VERIFIER_BACKEND == "anthropic":
         # Verifier shares ANTHROPIC_EXTRACTION_MODEL for the anthropic backend
-        # (see audit F109 — no dedicated ANTHROPIC_VERIFIER_MODEL knob today).
+        # (no dedicated ANTHROPIC_VERIFIER_MODEL knob today).
         return f"anthropic:{ANTHROPIC_EXTRACTION_MODEL}"
     if _VERIFIER_BACKEND == "openai":
         return f"openai:{OPENAI_EXTRACTION_MODEL}"
@@ -281,8 +280,10 @@ def _create_client():
     if _VERIFIER_BACKEND == "llamacpp":
         if OpenAI is None:
             raise RuntimeError("openai package not installed (needed for llamacpp backend)")
-        # Verifier uses its own llama-server (different port / model) so the
-        # extraction server doesn't get blocked. Defaults to Qwen2.5-14B.
+        # The llamacpp verifier backend reaches a separate llama-server
+        # (different port / model) so the extraction server stays unblocked.
+        # The paper's chosen verifier is gemma3:27b; reviewers can serve it
+        # over the openai_compat backend instead (the default).
         return OpenAI(
             base_url=VERIFIER_BASE_URL, api_key="not-needed",
             timeout=_REQUEST_TIMEOUT_S,

@@ -27,7 +27,7 @@ run.
 * `benchmarks/eval_leaderboard_v3.json` — per-run extractor metrics on the 100-clause holdout (P/R/F1, strict + adjusted).
 * `benchmarks/eval_per_field_action_v3.json` — per-field accuracy and per-action P/R/F1 for the 7 paper-reported configurations.
 * `benchmarks/eval_perturbation_v3.json` — per-model verifier metrics on the 100 synthetic perturbation cases (3-class + binary view).
-* `benchmarks/eval_verdict_agreement_v7.json` — per-model verdicts of three verifiers on real findings (input to the agreement table).
+* `benchmarks/eval_verdict_agreement_v7.json` — per-model verdicts of three verifiers (`deepseek-v3.1:671b`, `gpt-oss:120b`, `gemma4:31b`) on 100 real findings sampled with seed 42. This is the run the paper's appendix table reports (84.8% all-3 unanimous).
 * `benchmarks/perturbation_cases.jsonl` — 100 synthetic clause pairs with ground-truth labels. Re-input for `code/scripts/run_evaluation.py perturbation`.
 * `benchmarks/holdout_clauses_100.jsonl` — 100 clauses from real privacy policies. Re-input for `code/scripts/run_evaluation.py leaderboard` (paired with `gold_claude_holdout_100_v3.jsonl`).
 * `benchmarks/verdict_agreement_findings.jsonl` — 100 inconsistent findings sampled with seed 42 from `findings.csv`. Re-input for `code/scripts/run_evaluation.py agreement`.

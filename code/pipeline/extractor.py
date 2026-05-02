@@ -186,7 +186,7 @@ class _GDPRClassifier:
         per-class cutoffs are carried in gdpr_roberta_results.json. The
         argmax deployment was a distribution shift vs the training regime
         and also mis-modelled the 3.6% of training segments that carry 2+
-        true labels (see gdpr-dataset/README.md)."""
+        true labels (see gdpr_classifier/TRAINING_README.md)."""
         if not self._load():
             return []
         import torch

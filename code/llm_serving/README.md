@@ -57,7 +57,7 @@ that model.
 | Tag in the paper | Where to obtain weights | How we served it |
 |---|---|---|
 | `gemma3:27b`         | `ollama pull gemma3:27b` (Google, public)               | Local 2× A100 |
-| `gemma4:31b`         | `ollama pull gemma4:31b` (Google, public)               | Rented Vast.ai 4× A100 |
+| `gemma4:31b`         | `ollama pull gemma4:31b` (Google, public)               | Local 2× A100 |
 | `qwen3-next:80b`     | `ollama pull qwen3-next:80b` (Alibaba, public)          | Rented Vast.ai 4× A100 |
 | `qwen3-vl:235b`      | `ollama pull qwen3-vl:235b` (Alibaba, public)           | Rented Vast.ai 4× A100 |
 | `gpt-oss:120b`       | `ollama pull gpt-oss:120b` (OpenAI weights release)     | Rented Vast.ai 4× A100 |

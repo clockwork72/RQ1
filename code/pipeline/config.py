@@ -46,7 +46,7 @@ LLM_MODEL = os.environ.get("LLM_MODEL", "gemma3:27b")
 
 # Verifier config — defaults to Qwen2.5-14B-Instruct on its own llama-server.
 # Qwen2.5-14B won the in-house verification benchmark (87% acc, balanced F1
-# across hard_contradiction / soft_tension / non_conflict); see
+# across inconsistent / underspecified / non_conflict); see
 # data/benchmarks/eval_verification_qwen14b_v2.json. Non-reasoning per project
 # constraint. Runs on a separate llama-server (different port) from extraction.
 VERIFIER_BACKEND = os.environ.get("VERIFIER_BACKEND", "llamacpp").strip().lower() or "llamacpp"
@@ -76,8 +76,8 @@ EXTRACTION_PROMPT_VERSION = "2026-04-18-a"
 # Bumped 2026-04-18: stratified per-pattern genuine-rate prior replaces the
 # uniform ~12% figure; decision rules reordered so scope + rule-10 (public vs
 # private) sit before the verdict block; three few-shot examples appended
-# covering hard_contradiction / non_conflict-modality_misextraction /
-# soft_tension. Forces cache miss on the Stage-1 verifier.
+# covering inconsistent / non_conflict-modality_misextraction /
+# underspecified. Forces cache miss on the Stage-1 verifier.
 # Bumped 2026-04-24: prompt rewritten for cross-policy-only framing (all four
 # patterns are now cross-party; the former intra/cross split is gone). Π₁–Π₄
 # framed as first-party / third-party audit, pattern-specific guidance
@@ -87,7 +87,7 @@ EXTRACTION_PROMPT_VERSION = "2026-04-18-a"
 # block — only MODERATE default / HIGH when ambiguous remains.
 # Bumped 2026-04-24 (c): verdict vocabulary collapsed to three labels —
 # the LLM now emits one of {inconsistent, unspecified, non_conflict}
-# directly. The previous hard_contradiction / soft_tension split is
+# directly. The previous two-stage Stage-1/Stage-2 verifier is
 # gone; Stage-2 cluster verification is gone entirely (see
 # verifier.py history for the deleted CLUSTER_VERIFY_PROMPT /
 # verify_cluster / verify_clusters_only code paths). Forces a cache

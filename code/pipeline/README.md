@@ -43,7 +43,7 @@ For one (website, vendor) pair, `pipeline.run_pair()` walks these steps:
    | Π₄ | Temporal Contradiction | Stated retention / deletion windows disagree. |
 
    Each hit is a *candidate* `Inconsistency` with a `pattern_verdict` of
-   `hard_contradiction` or `soft_tension`.
+   `inconsistent` or `underspecified`.
 
 7. **Verify with LLM.** Each candidate goes to a bounded LLM call
    (`verifier.verify_candidate`) that re-reads the two clauses in

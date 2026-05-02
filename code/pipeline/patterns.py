@@ -919,7 +919,7 @@ def pi1_modality_contradiction(
                         pattern_name="Modality Contradiction",
                         statement_1=prohibition,
                         statement_2=permissive_statement,
-                        verdict=Verdict.HARD_CONTRADICTION,
+                        verdict=Verdict.INCONSISTENT,
                         severity=Severity.CRITICAL,
                         explanation=(
                             f"The policy prohibits '{prohibition.action}' for '{prohibition.data_object}' "
@@ -1055,7 +1055,7 @@ def _pi2_cross_policy(
             pattern_name="Exclusivity Violation",
             statement_1=excl,
             statement_2=other,
-            verdict=Verdict.HARD_CONTRADICTION,
+            verdict=Verdict.INCONSISTENT,
             severity=Severity.HIGH,
             explanation=(
                 f"'{excl.data_object}' is restricted to '{excl_purpose}' "
@@ -1217,7 +1217,7 @@ def pi2_exclusivity_violation(
                 pattern_name="Exclusivity Violation",
                 statement_1=excl,
                 statement_2=other,
-                verdict=Verdict.HARD_CONTRADICTION,
+                verdict=Verdict.INCONSISTENT,
                 severity=Severity.HIGH,
                 explanation=(
                     f"'{excl.data_object}' is restricted to '{excl_purpose}' "
@@ -1324,7 +1324,7 @@ def pi3_condition_asymmetry(
                 pattern_name="Condition Asymmetry",
                 statement_1=stricter,
                 statement_2=looser,
-                verdict=Verdict.SOFT_TENSION,
+                verdict=Verdict.UNDERSPECIFIED,
                 severity=Severity.HIGH,
                 explanation=(
                     f"The same practice on '{stricter.data_object}' requires "
@@ -1457,7 +1457,7 @@ def _pi3_cross_policy(
             pattern_name="Condition Asymmetry",
             statement_1=stricter,
             statement_2=looser,
-            verdict=Verdict.SOFT_TENSION,
+            verdict=Verdict.UNDERSPECIFIED,
             severity=Severity.HIGH,
             explanation=(
                 f"Website and vendor disagree on the consent condition for "
@@ -1597,7 +1597,7 @@ def pi4_temporal_contradiction(
                 pattern_name="Temporal Contradiction",
                 statement_1=first,
                 statement_2=second,
-                verdict=Verdict.HARD_CONTRADICTION,
+                verdict=Verdict.INCONSISTENT,
                 severity=Severity.HIGH,
                 explanation=explanation,
                 gdpr_categories=_unique_categories(
@@ -2066,9 +2066,9 @@ def _pi1_cross_check_pair(
     )
     retention_violated = any("retains indefinitely" in v for v in violations)
     verdict = (
-        Verdict.HARD_CONTRADICTION
+        Verdict.INCONSISTENT
         if prohibition_directly_violated or retention_violated
-        else Verdict.SOFT_TENSION
+        else Verdict.UNDERSPECIFIED
     )
     return Inconsistency(
         inconsistency_id="",

@@ -139,15 +139,14 @@ COMPARISON_PATTERNS = {"Π₁", "Π₂", "Π₃", "Π₄"}
 # ---------------------------------------------------------------------------
 #
 # The pipeline has two verdict layers only:
-#   pattern-level : hard_contradiction | soft_tension | non_conflict
+#   pattern-level : inconsistent | underspecified | non_conflict
 #                   (emitted by the structural pattern detectors; drives
 #                    severity ranking during curation — Severity.{CRITICAL,
 #                    HIGH, MEDIUM, LOW} is the orthogonal intensity field).
 #   LLM verifier  : inconsistent | unspecified | non_conflict
 #                   (single-stage; the final public finding label.
-#                    Previously split into hard_contradiction / soft_tension
-#                    plus a Stage-2 cluster combination layer; both are
-#                    collapsed into this three-label vocabulary.)
+#                    Previously a two-stage Stage-1/Stage-2 verifier;
+#                    collapsed into this three-label single-pass vocabulary.)
 #
 # The cluster-level Stage-2 verifier and its combination rules
 # (strongest / emergent_inconsistency / needs_investigation /

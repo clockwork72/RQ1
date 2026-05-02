@@ -28,7 +28,7 @@ VERIFIER_PROMPT
     (Evaluation §4.2.1).
 VERIFIER_PROMPT_LEGACY
     Older 3-verdict prompt
-    (``hard_contradiction`` / ``soft_tension`` / ``non_conflict``) with a
+    (``inconsistent`` / ``underspecified`` / ``non_conflict``) with a
     ``non_conflict`` default. Used to replicate the multi-model
     verdict-agreement experiment (Evaluation §4.2.2).
 
@@ -493,13 +493,13 @@ Fields: action={action_2} | modality={modality_2} | data={data_2}
 Pattern finding: {pattern_explanation}
 
 Verdicts:
-- hard_contradiction: logically incompatible.
-- soft_tension: individually valid but together leave users with weaker protection.
+- inconsistent: logically incompatible.
+- underspecified: individually valid but together leave users with weaker protection.
 - non_conflict: false alarm.
 
-Return ONLY JSON: {{"verdict": "hard_contradiction|soft_tension|non_conflict", "explanation": "≥20 chars", "confidence": "high|medium|low"}}
+Return ONLY JSON: {{"verdict": "inconsistent|underspecified|non_conflict", "explanation": "≥20 chars", "confidence": "high|medium|low"}}
 
-When in doubt → non_conflict. Prefer soft_tension over hard_contradiction unless unambiguous."""
+When in doubt → non_conflict. Prefer underspecified over inconsistent unless unambiguous."""
 
 
 __all__ = [

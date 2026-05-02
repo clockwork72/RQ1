@@ -40,8 +40,8 @@ class TemporalityType(Enum):
 
 
 class Verdict(Enum):
-    HARD_CONTRADICTION = "hard_contradiction"
-    SOFT_TENSION = "soft_tension"
+    INCONSISTENT = "inconsistent"
+    UNDERSPECIFIED = "underspecified"
     NON_CONFLICT = "non_conflict"
 
 

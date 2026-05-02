@@ -221,7 +221,7 @@ def _summary_counts(inconsistencies: list) -> dict[str, dict[str, int]]:
     summary = {
         "by_severity": {name: 0 for name in ("CRITICAL", "HIGH", "MEDIUM", "LOW")},
         "by_verdict": {
-            name: 0 for name in ("hard_contradiction", "soft_tension", "non_conflict")
+            name: 0 for name in ("inconsistent", "underspecified", "non_conflict")
         },
         "by_pattern": {},
     }
@@ -340,8 +340,8 @@ def _inconsistency_priority(item: dict) -> tuple[int, int, int, int, int, str]:
         item["severity"], 0
     )
     verdict_score = {
-        "hard_contradiction": 3,
-        "soft_tension": 2,
+        "inconsistent": 3,
+        "underspecified": 2,
         "non_conflict": 1,
     }.get(item["verdict"], 0)
     pattern_score = {"Π₈": 8, "Π₁": 5, "Π₄": 4, "Π₅": 4, "Π₂": 4}.get(
@@ -757,7 +757,7 @@ def run_pair(
     # The verifier receives the full policy texts so it can read the
     # surrounding paragraph for each clause — mirroring the 5-agent deep
     # audit protocol. Every candidate is kept in the output with its verdict
-    # set to one of {hard_contradiction, soft_tension, non_conflict}; nothing
+    # set to one of {inconsistent, underspecified, non_conflict}; nothing
     # is dropped here. Downstream consumers (curator, CSV, audit) decide how
     # to use the verdict.
     _step_end("patterns")

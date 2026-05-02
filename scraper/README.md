@@ -40,11 +40,30 @@ For each input domain `etld1` from the Tranco list:
 8. **Output** — one JSON line per input domain in `results.jsonl`, plus a
    sharded TP cache keyed by URL (`results_shard*.tp_cache.json`).
 
+## Input list
+
+`scrapable_websites_categorized.csv` is the input the crawler consumed.
+It is the **intersection of the Tranco top list and the Chrome User
+Experience Report (CrUX)** — a domain only enters the crawl if Tranco
+ranks it AND CrUX confirms it actually receives real user traffic. 7,490
+rows, one per domain. Columns:
+
+| Column | Meaning |
+|---|---|
+| `tranco_id`     | rank on the Tranco list at crawl time |
+| `domain`        | eTLD+1 |
+| `categories`    | pipe-separated detailed category labels |
+| `trust`         | site-trust label (e.g. `Minimal Risk`) |
+| `status_code`   | HTTP status from the trust-probe step |
+| `crux_code`     | CrUX response code (intersection signal) |
+| `main_category` | high-level bucket used in the §RQ1 by-category figure |
+
 ## Layout
 
 ```
 scraper/
-├── README.md                    # this file
+├── README.md                       # this file
+├── scrapable_websites_categorized.csv   # input list (Tranco × CrUX, categorized)
 ├── pyproject.toml
 ├── requirements.txt
 └── privacy_research_dataset/

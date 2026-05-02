@@ -38,6 +38,9 @@ def _wc(entry) -> int | None:
         return None
     if entry.get("language", "en") != "en":
         return None
+    wc = entry.get("word_count")
+    if isinstance(wc, int):
+        return wc
     return len(WORD_RE.findall(entry.get("text") or ""))
 
 
@@ -188,36 +191,16 @@ def fig1_fp_by_category(results_path: pathlib.Path, out_dir: pathlib.Path) -> li
 # ---------------------------------------------------------------------------
 def fig2_tp_by_prevalence(results_path: pathlib.Path, out_dir: pathlib.Path) -> list[pathlib.Path]:
     results_dir = results_path.parent
-    fp_blacklist, tp_blacklist = _load_blacklists(results_dir / "policy_quality_blacklist.json")
-    tp_cache = _load_tp_cache(results_dir)
-    qual_urls = {u for u, e in tp_cache.items()
-                 if (_wc(e) or 0) >= MIN_WORDS and u not in tp_blacklist}
-    redisc: dict[str, str] = {}
-    for u, e in tp_cache.items():
-        if isinstance(e, dict):
-            d = e.get("rediscovered_from_etld1")
-            if d:
-                redisc[d.lower()] = u
 
-    # Build "reachable" set: TPs we had ANY handle on —
-    # (a) in Tracker Radar or TrackerDB, OR
-    # (b) homepage was reachable during rediscovery (any outcome other than
-    #     home_unreachable / fetch_error).
-    tp_in_index: set[str] = set()
-    tp_home_reachable: set[str] = set()
-
-    redisc_path = results_dir / "tp_rediscovery_full.jsonl"
-    if redisc_path.exists():
-        bad_outcomes = {"home_unreachable", "fetch_error"}
-        with open(redisc_path) as fh:
-            for ln in fh:
-                rec = json.loads(ln)
-                d = (rec.get("domain") or rec.get("etld1") or "").lower()
-                if not d:
-                    continue
-                outcome = rec.get("outcome")
-                if outcome and outcome not in bad_outcomes:
-                    tp_home_reachable.add(d)
+    # Use the canonical qualifying-TP list so the figure matches the paper's
+    # headline (1,122 / 4,771 = 23.5%). Falls back to the per-observation
+    # policy_url heuristic only if the canonical file is missing.
+    canon_path = results_dir / "canonical_qualifying.json"
+    if canon_path.exists():
+        canon = json.load(open(canon_path))
+        tp_qualifying = {d.lower() for d in canon.get("tp_qualifying_etld1", [])}
+    else:
+        tp_qualifying = None
 
     tp_obs = collections.Counter()
     tp_covered: set[str] = set()
@@ -232,26 +215,12 @@ def fig2_tp_by_prevalence(results_path: pathlib.Path, out_dir: pathlib.Path) -> 
                 et = (tp.get("third_party_etld1") or "").lower()
                 if not et:
                     continue
-                # Track index membership per observation
-                if (tp.get("tracker_radar_source_domain_file")
-                        or tp.get("trackerdb_source_pattern_file")
-                        or tp.get("trackerdb_source_org_file")):
-                    tp_in_index.add(et)
-                pu = tp.get("policy_url") or redisc.get(et)
-                has_pol = bool(pu and pu in qual_urls)
                 tp_obs[et] += 1
-                if has_pol:
+                if tp_qualifying is not None and et in tp_qualifying:
                     tp_covered.add(et)
 
-    # Restrict universe to TPs we had some reachable handle on
-    reachable = tp_in_index | tp_home_reachable | tp_covered  # covered implies known
-    excluded = sum(1 for d in tp_obs if d not in reachable)
-    print(f"  [fig2] TPs before filter: {len(tp_obs)}, "
-          f"reachable: {sum(1 for d in tp_obs if d in reachable)}, "
-          f"excluded (dark, unreachable): {excluded}")
-
-    tp_obs = collections.Counter({d: n for d, n in tp_obs.items() if d in reachable})
-    tp_covered = {d for d in tp_covered if d in reachable}
+    print(f"  [fig2] TPs observed: {len(tp_obs)}, qualifying: {len(tp_covered)} "
+          f"({100*len(tp_covered)/max(1,len(tp_obs)):.1f}%)")
 
     ranked = sorted(tp_obs.items(), key=lambda x: -x[1])
     n = len(ranked)

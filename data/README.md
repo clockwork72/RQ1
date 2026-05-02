@@ -28,3 +28,6 @@ run.
 * `benchmarks/eval_per_field_action_v3.json` — per-field accuracy and per-action P/R/F1 for the 7 paper-reported configurations.
 * `benchmarks/eval_perturbation_v3.json` — per-model verifier metrics on the 100 synthetic perturbation cases (3-class + binary view).
 * `benchmarks/eval_verdict_agreement_v7.json` — per-model verdicts of three verifiers on real findings (input to the agreement table).
+* `benchmarks/perturbation_cases.jsonl` — 100 synthetic clause pairs with ground-truth labels. Re-input for `code/scripts/run_evaluation.py perturbation`.
+* `benchmarks/holdout_clauses_100.jsonl` — 100 clauses from real privacy policies. Re-input for `code/scripts/run_evaluation.py leaderboard` (paired with `gold_claude_holdout_100_v3.jsonl`).
+* `benchmarks/verdict_agreement_findings.jsonl` — 100 inconsistent findings sampled with seed 42 from `findings.csv`. Re-input for `code/scripts/run_evaluation.py agreement`.

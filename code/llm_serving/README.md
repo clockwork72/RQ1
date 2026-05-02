@@ -24,8 +24,8 @@ A 27B-class model fits in tensor-parallel mode across the two A100s with
 2× A100 80 GB (NVLink), 256 GB host RAM, CUDA 12.4, vLLM 0.6.x.
 
 **Heavier models — rented 4× NVIDIA A100 80 GB on Vast.ai.**
-Larger models in our registry (`gemma4:31b`, `qwen3-vl:235b`,
-`gpt-oss:120b`, `deepseek-v3.1:671b`) do not fit in 2× A100, so we
+Larger models in our registry (`qwen3-vl:235b`, `gpt-oss:120b`,
+`deepseek-v3.1:671b`) do not fit in 2× A100, so we
 **rented a 4× A100 80 GB instance on Vast.ai** for those runs. The
 rented box served the same vLLM / Ollama OpenAI-compatible `/v1`
 endpoint; the pipeline was pointed at it by changing only `LLM_BASE_URL`.

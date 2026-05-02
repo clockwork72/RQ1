@@ -74,11 +74,11 @@ description and the file map.
 
 Trainer + dataset + per-model evaluation outputs for the 18-category GDPR
 transparency classifier described in `Appendix.tex`. Ships the Rahat et al.
-(WPES'22) dataset and the result JSONs the notebook reads; the 476 MB
-fine-tuned RoBERTa weights are released separately on the GitHub release
-page so reviewers can download once and skip training. See the folder's
-own [`TRAINING_README.md`](gdpr_classifier/TRAINING_README.md) for
-re-training and re-evaluation instructions.
+(WPES'22) dataset and the result JSONs the notebook reads; the trained
+weights are not bundled with this artifact (476 MB), but the trainer is
+deterministic so the numbers can be reproduced from the dataset. See the
+folder's own [`TRAINING_README.md`](gdpr_classifier/TRAINING_README.md)
+for re-training and re-evaluation instructions.
 
 ## [`data/`](data)
 

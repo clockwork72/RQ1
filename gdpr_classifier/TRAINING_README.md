@@ -59,8 +59,10 @@ threshold per class on validation before reporting test metrics.
 ## Trained weights
 
 The 476 MB fine-tuned RoBERTa weights (`model.safetensors` + tokenizer
-config) are not bundled with this repo. They are published on the
-GitHub release page as `gdpr_roberta.tar.gz` so reviewers can download
-once and skip training. Extract that tarball into `gdpr_classifier/model/`
-to use the model directly via
-`AutoModelForSequenceClassification.from_pretrained`.
+config) are not bundled with this artifact. The notebook
+`notebooks/Classifier.ipynb` reads `results/gdpr_*.json` directly, so the
+classifier benchmark numbers in the appendix can be reproduced without
+the weights. To run the model on new clauses, re-train via the recipe
+above (about an hour on one A100) — the trainer is deterministic, so a
+fresh run reproduces the per-label thresholds and test metrics within
+seed-level noise.

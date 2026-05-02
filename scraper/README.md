@@ -78,8 +78,3 @@ relevant — they're operator plumbing for our specific HPC environment:
 - HPC control plane (`hpc_*.py`)
 - Annotation tooling (`annotate_*.py`, `annotator.py`)
 - The CLI wrappers (`cli.py`, `summary.py`)
-- Dashboard frontends
-
-If a reviewer wants the full operator package, the production scraper is a
-direct extension of these modules — but the modules above are the ones that
-implement the scraping decisions that affect the dataset.

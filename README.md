@@ -11,7 +11,8 @@ GDPR Transparency on the Web* (CCS '26).
 │   ├── RQ1.ipynb               # availability, length, readability  (Findings.tex §RQ1)
 │   ├── RQ2.ipynb               # GDPR completeness                  (Findings.tex §RQ2)
 │   ├── RQ3.ipynb               # cross-policy inconsistency         (Findings.tex §RQ3)
-│   └── Evaluation.ipynb        # extractor / verifier evaluation    (Evaluation.tex + Appendix.tex)
+│   ├── Evaluation.ipynb        # extractor / verifier evaluation    (Evaluation.tex + Appendix.tex)
+│   └── Classifier.ipynb        # GDPR-classifier benchmark + Fig 1  (Appendix.tex)
 ├── code/
 │   ├── prompts/                # unified prompt registry (single source of truth)
 │   ├── pipeline/               # vendored extractor + verifier
@@ -20,6 +21,7 @@ GDPR Transparency on the Web* (CCS '26).
 │   ├── requirements.txt
 │   ├── requirements-server.txt
 │   └── .env.example
+├── gdpr_classifier/            # RoBERTa GDPR classifier: trainer, dataset, weights, results
 └── scraper/                    # methodology reference for the FP/TP crawler (see scraper/README.md)
 ```
 

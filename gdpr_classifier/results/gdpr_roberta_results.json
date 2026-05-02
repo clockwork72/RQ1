@@ -1,0 +1,152 @@
+{
+  "roberta-base": {
+    "exact_match": 0.9,
+    "micro_precision": 0.925,
+    "micro_recall": 0.938,
+    "micro_f1": 0.931,
+    "macro_precision": 0.946,
+    "macro_recall": 0.937,
+    "macro_f1": 0.939,
+    "per_label": {
+      "Adequacy Decision": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 4
+      },
+      "Controller Contact": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 6
+      },
+      "DPO Contact": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 10
+      },
+      "Data Categories": {
+        "precision": 0.871,
+        "recall": 0.964,
+        "f1": 0.915,
+        "support": 28
+      },
+      "Data Recipients": {
+        "precision": 0.882,
+        "recall": 0.882,
+        "f1": 0.882,
+        "support": 17
+      },
+      "Lodge Complaint": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 6
+      },
+      "Processing Purpose": {
+        "precision": 0.9,
+        "recall": 0.973,
+        "f1": 0.935,
+        "support": 37
+      },
+      "Profiling": {
+        "precision": 1.0,
+        "recall": 0.857,
+        "f1": 0.923,
+        "support": 7
+      },
+      "Provision Requirement": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 10
+      },
+      "Right to Access": {
+        "precision": 0.875,
+        "recall": 1.0,
+        "f1": 0.933,
+        "support": 7
+      },
+      "Right to Erase": {
+        "precision": 0.833,
+        "recall": 1.0,
+        "f1": 0.909,
+        "support": 5
+      },
+      "Right to Object": {
+        "precision": 0.882,
+        "recall": 0.882,
+        "f1": 0.882,
+        "support": 17
+      },
+      "Right to Portability": {
+        "precision": 1.0,
+        "recall": 0.9,
+        "f1": 0.947,
+        "support": 10
+      },
+      "Right to Restrict": {
+        "precision": 0.875,
+        "recall": 0.778,
+        "f1": 0.824,
+        "support": 9
+      },
+      "Safeguards Copy": {
+        "precision": 1.0,
+        "recall": 0.833,
+        "f1": 0.909,
+        "support": 6
+      },
+      "Source of Data": {
+        "precision": 0.9,
+        "recall": 0.9,
+        "f1": 0.9,
+        "support": 10
+      },
+      "Storage Period": {
+        "precision": 1.0,
+        "recall": 0.889,
+        "f1": 0.941,
+        "support": 9
+      },
+      "Withdraw Consent": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 11
+      }
+    },
+    "avg_time_per_sample": 0.0035,
+    "total_time": 0.71,
+    "n_test": 200,
+    "errors": 0,
+    "training_time": 861.9,
+    "model_name": "roberta-base",
+    "epochs": 10,
+    "loss_function": "focal",
+    "focal_gamma": 2.0,
+    "oversampling": false,
+    "thresholds_tuned": true,
+    "per_class_thresholds": {
+      "Adequacy Decision": 0.5000000000000001,
+      "Controller Contact": 0.5500000000000002,
+      "DPO Contact": 0.7000000000000002,
+      "Data Categories": 0.6500000000000001,
+      "Data Recipients": 0.7500000000000002,
+      "Lodge Complaint": 0.8500000000000002,
+      "Processing Purpose": 0.5000000000000001,
+      "Profiling": 0.8000000000000002,
+      "Provision Requirement": 0.5500000000000002,
+      "Right to Access": 0.8000000000000002,
+      "Right to Erase": 0.40000000000000013,
+      "Right to Object": 0.40000000000000013,
+      "Right to Portability": 0.9000000000000002,
+      "Right to Restrict": 0.7500000000000002,
+      "Safeguards Copy": 0.7000000000000002,
+      "Source of Data": 0.7000000000000002,
+      "Storage Period": 0.6000000000000002,
+      "Withdraw Consent": 0.8000000000000002
+    }
+  }
+}

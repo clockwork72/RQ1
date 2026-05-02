@@ -779,7 +779,11 @@ POSITIVE_PROCESSING_PATTERN = re.compile(
 )
 
 
-from prompts.unified_prompts import EXTRACTION_PROMPT  # vendored prompt — see prompts/unified_prompts.py
+from prompts.unified_prompts import (  # vendored prompts — see prompts/unified_prompts.py
+    EXTRACTION_PROMPT,
+    REFLECTION_EXHAUSTION_PROMPT,
+    REFLECTION_RECOVERY_PROMPT,
+)
 
 
 def _normalize_whitespace(value: str) -> str:
@@ -2139,24 +2143,7 @@ def _check_if_exhausted(client, prompt: str, raw_items: list[dict]) -> bool:
     messages = [
         {"role": "user", "content": prompt},
         {"role": "assistant", "content": _format_pps_for_reflection(raw_items)},
-        {"role": "user", "content": (
-            "Compare the JSON above against the original clause text. Determine "
-            "whether AT LEAST ONE additional data practice from the clause has "
-            "not yet been captured.\n"
-            "\n"
-            "Specifically check for:\n"
-            "  - user rights or opt-out mechanisms not yet extracted\n"
-            "  - retention periods (days / months / years / until-event) missing from the temporality fields\n"
-            "  - condition variants of an already-extracted practice (same data + action under different consent states)\n"
-            "  - recipients or third-party vendors named in the clause but not present as SHARE/TRANSFER statements\n"
-            "  - negated commitments whose affirmative counterpart (under the escape clause) is missing\n"
-            "\n"
-            "Return ONLY valid JSON, no markdown, no code fences, no prose:\n"
-            "  {\"exhausted\": true}   — the JSON above completely covers every data practice in the clause\n"
-            "  {\"exhausted\": false}  — at least one practice is missing\n"
-            "\n"
-            "`exhausted` MUST be a JSON boolean (true or false), not a string, not a number."
-        )},
+        {"role": "user", "content": REFLECTION_EXHAUSTION_PROMPT},
     ]
     try:
         response_text = _call_extraction_model_multiturn(client, messages)
@@ -2188,49 +2175,7 @@ def _extract_with_reflection(client, prompt: str) -> list[dict]:
             messages = [
                 {"role": "user", "content": prompt},
                 {"role": "assistant", "content": _format_pps_for_reflection(all_items)},
-                {"role": "user", "content": (
-                    "Review the JSON above against the original clause. Some data "
-                    "processing statements may have been missed. Check specifically "
-                    "for these categories, which first-round extractions routinely "
-                    "overlook:\n"
-                    "\n"
-                    "  1. USER RIGHTS — statements like \"you may delete\", \"you can "
-                    "opt out\", \"you have the right to access/port/restrict\". These "
-                    "use modality=PERMISSION with action=deletion_right / access_right "
-                    "/ optout_right / portability_right.\n"
-                    "\n"
-                    "  2. RETENTION WINDOWS — \"kept for N days/months\", \"until "
-                    "account deletion\", \"retained indefinitely for audit purposes\". "
-                    "Set temporality and temporality_value accordingly.\n"
-                    "\n"
-                    "  3. CONDITION VARIANTS — the SAME (actor, action, data_object) "
-                    "pair can appear under DIFFERENT conditions in the same clause "
-                    "and count as separate statements. E.g. \"by default\" vs "
-                    "\"upon_consent\" vs \"if_opted_in\" for the same data are three "
-                    "distinct practices.\n"
-                    "\n"
-                    "  4. THIRD-PARTY EMBEDS AND RECIPIENTS — \"we use Google "
-                    "Analytics\", \"processed by Stripe\", \"shared with advertising "
-                    "partners\". Extract these as SHARE/TRANSFER statements with the "
-                    "vendor in `recipient`.\n"
-                    "\n"
-                    "  5. CONDITIONAL NEGATIONS — \"we do not share X without your "
-                    "consent\" implies both (a) a PROHIBITION-like commitment on "
-                    "un-consented sharing and (b) an affirmative SHARE statement "
-                    "upon consent. Extract both sides when the escape clause is "
-                    "explicit.\n"
-                    "\n"
-                    "  6. TEMPORAL VARIANTS — a single sentence can assign different "
-                    "retention windows to different data types (\"email kept for 30 "
-                    "days, IP address for 14 days\"). Emit one statement per "
-                    "(data_object, retention) pair.\n"
-                    "\n"
-                    "Extract ONLY statements not already present in the JSON above. "
-                    "Use the same 11-key schema (actor, action, modality, data_object, "
-                    "purpose, recipient, condition, temporality, temporality_value, "
-                    "is_negative, scope). Return a JSON array of the NEW statements. "
-                    "If there are no more statements to extract, return exactly: []"
-                )},
+                {"role": "user", "content": REFLECTION_RECOVERY_PROMPT},
             ]
             try:
                 response_text = _call_extraction_model_multiturn(client, messages)

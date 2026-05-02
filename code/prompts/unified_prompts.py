@@ -12,6 +12,15 @@ EXTRACTION_PROMPT_FEWSHOT
     Extractor prompt with worked examples; used in the qwen3-vl-instruct
     few-shot configuration of the extractor leaderboard
     (Evaluation §4.1).
+REFLECTION_RECOVERY_PROMPT
+    Round-2+ reflection prompt: feeds the previous extraction back to the
+    model and asks for any practice that was missed (user rights,
+    retention windows, condition variants, recipients, conditional
+    negations, temporal variants).
+REFLECTION_EXHAUSTION_PROMPT
+    Exhaustion check between reflection rounds: returns
+    ``{"exhausted": true|false}`` and lets the loop stop early when the
+    model agrees nothing is left.
 VERIFIER_PROMPT
     Current 3-verdict verifier prompt
     (``inconsistent`` / ``unspecified`` / ``non_conflict``). Used by the
@@ -217,6 +226,43 @@ Output: [{{"actor": "FirstParty", "action": "share", "modality": "COMMITMENT", "
 Section: {section}
 Clause: {clause}
 """
+
+
+# ===========================================================================
+# Reflection (multi-turn re-extraction)
+# ===========================================================================
+
+REFLECTION_RECOVERY_PROMPT = """Review the JSON above against the original clause. Some data processing statements may have been missed. Check specifically for these categories, which first-round extractions routinely overlook:
+
+  1. USER RIGHTS — statements like "you may delete", "you can opt out", "you have the right to access/port/restrict". These use modality=PERMISSION with action=deletion_right / access_right / optout_right / portability_right.
+
+  2. RETENTION WINDOWS — "kept for N days/months", "until account deletion", "retained indefinitely for audit purposes". Set temporality and temporality_value accordingly.
+
+  3. CONDITION VARIANTS — the SAME (actor, action, data_object) pair can appear under DIFFERENT conditions in the same clause and count as separate statements. E.g. "by default" vs "upon_consent" vs "if_opted_in" for the same data are three distinct practices.
+
+  4. THIRD-PARTY EMBEDS AND RECIPIENTS — "we use Google Analytics", "processed by Stripe", "shared with advertising partners". Extract these as SHARE/TRANSFER statements with the vendor in `recipient`.
+
+  5. CONDITIONAL NEGATIONS — "we do not share X without your consent" implies both (a) a PROHIBITION-like commitment on un-consented sharing and (b) an affirmative SHARE statement upon consent. Extract both sides when the escape clause is explicit.
+
+  6. TEMPORAL VARIANTS — a single sentence can assign different retention windows to different data types ("email kept for 30 days, IP address for 14 days"). Emit one statement per (data_object, retention) pair.
+
+Extract ONLY statements not already present in the JSON above. Use the same 11-key schema (actor, action, modality, data_object, purpose, recipient, condition, temporality, temporality_value, is_negative, scope). Return a JSON array of the NEW statements. If there are no more statements to extract, return exactly: []"""
+
+
+REFLECTION_EXHAUSTION_PROMPT = """Compare the JSON above against the original clause text. Determine whether AT LEAST ONE additional data practice from the clause has not yet been captured.
+
+Specifically check for:
+  - user rights or opt-out mechanisms not yet extracted
+  - retention periods (days / months / years / until-event) missing from the temporality fields
+  - condition variants of an already-extracted practice (same data + action under different consent states)
+  - recipients or third-party vendors named in the clause but not present as SHARE/TRANSFER statements
+  - negated commitments whose affirmative counterpart (under the escape clause) is missing
+
+Return ONLY valid JSON, no markdown, no code fences, no prose:
+  {"exhausted": true}   the JSON above completely covers every data practice in the clause
+  {"exhausted": false}  at least one practice is missing
+
+`exhausted` MUST be a JSON boolean (true or false), not a string, not a number."""
 
 
 # ---------------------------------------------------------------------------
@@ -459,6 +505,8 @@ When in doubt → non_conflict. Prefer soft_tension over hard_contradiction unle
 __all__ = [
     "EXTRACTION_PROMPT",
     "EXTRACTION_PROMPT_FEWSHOT",
+    "REFLECTION_RECOVERY_PROMPT",
+    "REFLECTION_EXHAUSTION_PROMPT",
     "VERIFIER_PROMPT",
     "VERIFIER_PROMPT_LEGACY",
 ]

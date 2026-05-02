@@ -1,0 +1,132 @@
+{
+  "bert-base-uncased": {
+    "exact_match": 0.86,
+    "micro_precision": 0.887,
+    "micro_recall": 0.943,
+    "micro_f1": 0.914,
+    "macro_precision": 0.918,
+    "macro_recall": 0.95,
+    "macro_f1": 0.931,
+    "per_label": {
+      "Adequacy Decision": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 4
+      },
+      "Controller Contact": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 6
+      },
+      "DPO Contact": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 10
+      },
+      "Data Categories": {
+        "precision": 0.771,
+        "recall": 0.964,
+        "f1": 0.857,
+        "support": 28
+      },
+      "Data Recipients": {
+        "precision": 0.889,
+        "recall": 0.941,
+        "f1": 0.914,
+        "support": 17
+      },
+      "Lodge Complaint": {
+        "precision": 0.857,
+        "recall": 1.0,
+        "f1": 0.923,
+        "support": 6
+      },
+      "Processing Purpose": {
+        "precision": 0.919,
+        "recall": 0.919,
+        "f1": 0.919,
+        "support": 37
+      },
+      "Profiling": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 7
+      },
+      "Provision Requirement": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 10
+      },
+      "Right to Access": {
+        "precision": 0.778,
+        "recall": 1.0,
+        "f1": 0.875,
+        "support": 7
+      },
+      "Right to Erase": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 5
+      },
+      "Right to Object": {
+        "precision": 0.882,
+        "recall": 0.882,
+        "f1": 0.882,
+        "support": 17
+      },
+      "Right to Portability": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 10
+      },
+      "Right to Restrict": {
+        "precision": 0.875,
+        "recall": 0.778,
+        "f1": 0.824,
+        "support": 9
+      },
+      "Safeguards Copy": {
+        "precision": 1.0,
+        "recall": 0.833,
+        "f1": 0.909,
+        "support": 6
+      },
+      "Source of Data": {
+        "precision": 0.643,
+        "recall": 0.9,
+        "f1": 0.75,
+        "support": 10
+      },
+      "Storage Period": {
+        "precision": 1.0,
+        "recall": 0.889,
+        "f1": 0.941,
+        "support": 9
+      },
+      "Withdraw Consent": {
+        "precision": 0.917,
+        "recall": 1.0,
+        "f1": 0.957,
+        "support": 11
+      }
+    },
+    "avg_time_per_sample": 0.0036,
+    "total_time": 0.73,
+    "n_test": 200,
+    "errors": 0,
+    "training_time": 1292.2,
+    "model_name": "bert-base-uncased",
+    "epochs": 15,
+    "loss_function": "focal",
+    "focal_gamma": 2.0,
+    "oversampling": false,
+    "thresholds_tuned": false
+  }
+}

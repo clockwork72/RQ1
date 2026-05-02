@@ -1,0 +1,152 @@
+{
+  "nlpaueb/legal-bert-base-uncased": {
+    "exact_match": 0.845,
+    "micro_precision": 0.88,
+    "micro_recall": 0.914,
+    "micro_f1": 0.897,
+    "macro_precision": 0.912,
+    "macro_recall": 0.934,
+    "macro_f1": 0.92,
+    "per_label": {
+      "Adequacy Decision": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 4
+      },
+      "Controller Contact": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 6
+      },
+      "DPO Contact": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 10
+      },
+      "Data Categories": {
+        "precision": 0.758,
+        "recall": 0.893,
+        "f1": 0.82,
+        "support": 28
+      },
+      "Data Recipients": {
+        "precision": 0.824,
+        "recall": 0.824,
+        "f1": 0.824,
+        "support": 17
+      },
+      "Lodge Complaint": {
+        "precision": 0.857,
+        "recall": 1.0,
+        "f1": 0.923,
+        "support": 6
+      },
+      "Processing Purpose": {
+        "precision": 0.868,
+        "recall": 0.892,
+        "f1": 0.88,
+        "support": 37
+      },
+      "Profiling": {
+        "precision": 1.0,
+        "recall": 0.857,
+        "f1": 0.923,
+        "support": 7
+      },
+      "Provision Requirement": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 10
+      },
+      "Right to Access": {
+        "precision": 0.778,
+        "recall": 1.0,
+        "f1": 0.875,
+        "support": 7
+      },
+      "Right to Erase": {
+        "precision": 0.833,
+        "recall": 1.0,
+        "f1": 0.909,
+        "support": 5
+      },
+      "Right to Object": {
+        "precision": 0.938,
+        "recall": 0.882,
+        "f1": 0.909,
+        "support": 17
+      },
+      "Right to Portability": {
+        "precision": 1.0,
+        "recall": 0.9,
+        "f1": 0.947,
+        "support": 10
+      },
+      "Right to Restrict": {
+        "precision": 0.875,
+        "recall": 0.778,
+        "f1": 0.824,
+        "support": 9
+      },
+      "Safeguards Copy": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 6
+      },
+      "Source of Data": {
+        "precision": 0.692,
+        "recall": 0.9,
+        "f1": 0.783,
+        "support": 10
+      },
+      "Storage Period": {
+        "precision": 1.0,
+        "recall": 0.889,
+        "f1": 0.941,
+        "support": 9
+      },
+      "Withdraw Consent": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 11
+      }
+    },
+    "avg_time_per_sample": 0.0083,
+    "total_time": 1.66,
+    "n_test": 200,
+    "errors": 0,
+    "training_time": 2405.3,
+    "model_name": "nlpaueb/legal-bert-base-uncased",
+    "epochs": 15,
+    "loss_function": "focal",
+    "focal_gamma": 2.0,
+    "oversampling": false,
+    "thresholds_tuned": true,
+    "per_class_thresholds": {
+      "Adequacy Decision": 0.7500000000000002,
+      "Controller Contact": 0.3500000000000001,
+      "DPO Contact": 0.5000000000000001,
+      "Data Categories": 0.6500000000000001,
+      "Data Recipients": 0.5000000000000001,
+      "Lodge Complaint": 0.8500000000000002,
+      "Processing Purpose": 0.5500000000000002,
+      "Profiling": 0.8500000000000002,
+      "Provision Requirement": 0.45000000000000007,
+      "Right to Access": 0.5000000000000001,
+      "Right to Erase": 0.45000000000000007,
+      "Right to Object": 0.6500000000000001,
+      "Right to Portability": 0.9000000000000002,
+      "Right to Restrict": 0.8000000000000002,
+      "Safeguards Copy": 0.5500000000000002,
+      "Source of Data": 0.7500000000000002,
+      "Storage Period": 0.9000000000000002,
+      "Withdraw Consent": 0.8000000000000002
+    }
+  }
+}

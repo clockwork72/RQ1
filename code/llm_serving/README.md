@@ -44,17 +44,3 @@ python scripts/run_extraction.py --policy data/sample_policy.txt --out out/
 python scripts/run_verification.py --extractions out/ --pairs data/sample_pairs.csv --out findings.csv
 ```
 
-## Rented-GPU alternative (Vast.ai 4× A100)
-
-If you do not have a 2× A100 box, rent a 4× A100 instance on Vast.ai (or
-any other provider), launch the same vLLM / Ollama server on it, and point
-the repo at it by exporting:
-
-```bash
-export LLM_BASE_URL="http://<your-vast-host>:<port>/v1"
-export LLM_API_KEY="<your key>"
-export LLM_MODEL="gemma3:27b"      # or any other model your instance serves
-```
-
-The pipeline does not care whether the endpoint is local or rented — only
-that it accepts OpenAI-style chat-completions.

@@ -1,0 +1,43 @@
+Privacy Policy for Example.com
+
+Last updated: 2026-04-15
+
+We at Example.com value your privacy. This policy explains what personal
+data we collect and how we use it.
+
+1. Data we collect
+
+We collect the following categories of personal data:
+
+  - Account data: name, email address, hashed password.
+  - Usage data: pages visited, search queries, clicks. We collect usage
+    data only for the purpose of improving our service. We will not use
+    usage data for advertising purposes.
+  - Device data: IP address, browser type, operating system. We retain
+    device data for 30 days and delete it thereafter.
+
+2. Third-party services
+
+We embed Google Analytics on our pages. Google Analytics receives the
+device data listed above so it can compute aggregate site-traffic
+statistics on our behalf. We do not authorise Google Analytics to use
+this data for any other purpose.
+
+We do not sell your personal data to third parties.
+
+3. Your rights
+
+You have the right to access, correct, port, and delete the personal
+data we hold about you. To exercise these rights, email
+privacy@example.com.
+
+4. Retention
+
+We retain your account data for as long as your account is active and
+for 90 days after deletion. We retain device data for 30 days, as
+described above.
+
+5. Contact
+
+For privacy questions, contact our Data Protection Officer at
+dpo@example.com.

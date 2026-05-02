@@ -1,0 +1,2 @@
+pair_id,website_file,vendor_file,vendor_name,service_type
+example_com__examplevendor_com,sample_policies/example_site.txt,sample_policies/example_vendor.txt,ExampleVendor,analytics

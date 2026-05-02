@@ -28,12 +28,19 @@ from .extractor import (
     extract_pps_from_policy,
     segment_clauses,
 )
-from graph import build_graph, compute_graph_metrics, merge_graphs
+from .graph import build_graph, compute_graph_metrics, merge_graphs
 from .normalizer import DATA_ONTOLOGY, DATA_SYNONYMS, PURPOSE_SYNONYMS
 from .pair_cache import load_pair_cache, pair_cache_key, save_pair_cache
 from .patterns import PATTERN_IDS, run_all_patterns
 from .verifier import verify_candidates
-from visualize import visualize_graph
+
+# visualize_graph is an optional plotting helper not used by the headless
+# pipeline; only import when explicitly needed so reviewers without
+# matplotlib / pygraphviz can still run extraction + verification.
+try:
+    from .visualize import visualize_graph
+except Exception:  # pragma: no cover - optional dependency
+    visualize_graph = None
 
 # Optional per-stage debug dumping — no-op unless PIPELINE_DEBUG=1 is set.
 try:

@@ -9,7 +9,7 @@ import re
 import networkx as nx
 
 from .config import PI8_ALLOW_SAME_GROUP_BYPASS
-from graph import extract_statements_from_graph
+from .graph import extract_statements_from_graph
 from .normalizer import (
     CANONICAL_PURPOSES,
     data_subsumes,

@@ -1,6 +1,6 @@
 """Extract Privacy Practice Statements (PPSes) from a privacy-policy text file.
 
-Wraps `pipeline.extractor.extract_pps_from_text`, which speaks the OpenAI
+Wraps `pipeline.extractor.extract_pps_from_policy`, which speaks the OpenAI
 chat-completions protocol and is configured via the `LLM_BASE_URL` +
 `LLM_API_KEY` env vars used by the production pipeline. Point those at a
 local 2× A100 server (`source llm_serving/env_local.sh`) or at a rented
@@ -25,11 +25,11 @@ import sys
 import time
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO))
+REPO_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO_ROOT / "code"))
 
 from pipeline.extractor import (  # noqa: E402
-    extract_pps_from_text,
+    extract_pps_from_policy,
     compute_clause_gdpr_coverage,
 )
 
@@ -46,7 +46,7 @@ def run_one(text_path: Path, out_dir: Path, source: str) -> dict:
 
     text = text_path.read_text(encoding='utf-8', errors='replace')
     t0 = time.time()
-    pps = extract_pps_from_text(text, policy_id=pid)
+    pps = extract_pps_from_policy(text, policy_source=source, policy_id=pid)
     cov = compute_clause_gdpr_coverage(text, policy_id=pid)
     elapsed = time.time() - t0
 

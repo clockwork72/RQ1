@@ -1,0 +1,44 @@
+ExampleVendor Privacy Policy
+
+Last updated: 2026-04-22
+
+ExampleVendor provides analytics and advertising services to publishers.
+This policy describes how we handle data we receive when you visit a
+site that embeds our pixel.
+
+1. Data we collect
+
+We collect device data (IP address, browser, operating system, screen
+resolution, language) and behavioural data (pages viewed, time on page,
+clicks, mouse movements) from publisher sites that embed our SDK. We
+also collect any data the publisher chooses to share with us.
+
+We retain this data indefinitely for our own product-improvement and
+research purposes.
+
+2. How we use the data
+
+We use the data we collect to:
+
+  - compute aggregate analytics for the publisher;
+  - build interest profiles to improve targeted advertising;
+  - sell aggregated audience segments to advertising partners;
+  - share data with our parent company and corporate affiliates.
+
+3. Sharing with third parties
+
+We share your data with our advertising partners and affiliates as
+described above. We may also disclose data when required by law.
+
+4. Your rights
+
+If you would like to opt out of advertising-based use of your data,
+please contact us at privacy@examplevendor.com.
+
+5. Retention
+
+We retain data indefinitely unless you specifically request deletion.
+
+6. Contact
+
+For privacy questions, write to privacy@examplevendor.com.
